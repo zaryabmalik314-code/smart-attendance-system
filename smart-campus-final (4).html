@@ -1,0 +1,2386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCEMS — Garrison University</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#040c1a;--navy2:#071224;--navy3:#0a1830;--navy4:#0e2040;--navy5:#132850;
+  --gold:#d4a017;--gold2:#e0b030;--gold3:#ebc24e;--gold4:#f4d880;
+  --gs:#10b981;--gsl:#34d399;--gsd:#064e3b;
+  --ds:#ef4444;--dsl:#fca5a5;--dsd:#7f1d1d;
+  --ws:#f59e0b;--wsl:#fcd34d;
+  --fs:'Inter',-apple-system,sans-serif;
+  --fse:'Cormorant Garamond',Georgia,serif;
+  --fmo:'JetBrains Mono','Courier New',monospace;
+  --bs:rgba(201,162,39,.14);--bg:rgba(201,162,39,.38);--bw:rgba(255,255,255,.09);
+  --g1:rgba(255,255,255,.03);--g2:rgba(255,255,255,.06);
+  --sh:0 8px 32px rgba(0,0,0,.5);--shl:0 20px 60px rgba(0,0,0,.65);
+  --glow:0 0 40px rgba(201,162,39,.18);--glows:0 0 20px rgba(16,185,129,.28);--glowd:0 0 20px rgba(239,68,68,.28);
+  --ease:cubic-bezier(.4,0,.2,1);--spring:cubic-bezier(.34,1.56,.64,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:15px;scroll-behavior:smooth;}
+body{font-family:var(--fs);background:var(--navy);color:#b8cce4;min-height:100vh;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+.bgl{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse 100% 60% at 15% 0%,rgba(201,162,39,.06) 0%,transparent 55%),radial-gradient(ellipse 60% 80% at 85% 100%,rgba(19,40,80,.8) 0%,transparent 65%),linear-gradient(175deg,#040c1a 0%,#071224 35%,#0a1830 65%,#071224 100%);pointer-events:none;}
+.bgg{position:fixed;inset:0;z-index:0;opacity:.028;background-image:linear-gradient(rgba(201,162,39,1) 1px,transparent 1px),linear-gradient(90deg,rgba(201,162,39,1) 1px,transparent 1px);background-size:70px 70px;pointer-events:none;}
+#app{position:relative;z-index:1;}
+
+/* ── SCREENS ── */
+.screen{display:none;min-height:100vh;}
+.screen.on{display:flex;}
+
+/* ── AUTH SCREEN ── */
+#s-auth{align-items:center;justify-content:center;padding:24px;flex-direction:column;gap:0;}
+.auth-wrap{width:100%;max-width:1100px;display:grid;grid-template-columns:1fr 1fr;min-height:600px;border-radius:28px;overflow:hidden;box-shadow:var(--shl);border:1px solid var(--bs);}
+@media(max-width:800px){.auth-wrap{grid-template-columns:1fr;}}
+
+.auth-left{background:linear-gradient(160deg,var(--navy4) 0%,var(--navy2) 100%);padding:52px 48px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+.auth-left::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 80% 60% at 20% 20%,rgba(201,162,39,.08) 0%,transparent 65%);pointer-events:none;}
+.al-logo{display:flex;align-items:center;gap:14px;margin-bottom:48px;}
+.al-shield svg{width:46px;height:52px;}
+.al-uni{font-family:var(--fse);font-size:17px;font-weight:700;color:#fff;line-height:1.2;}
+.al-sys{font-size:9.5px;letter-spacing:.18em;color:var(--gold3);text-transform:uppercase;font-weight:600;margin-top:2px;}
+.al-hero{}
+.al-h1{font-family:var(--fse);font-size:clamp(1.8rem,3vw,2.8rem);font-weight:700;color:#fff;line-height:1.1;margin-bottom:16px;}
+.al-h1 span{color:var(--gold3);}
+.al-desc{font-size:13.5px;color:rgba(184,204,228,.52);line-height:1.7;max-width:340px;margin-bottom:36px;}
+.al-features{display:flex;flex-direction:column;gap:12px;}
+.al-feat{display:flex;align-items:center;gap:12px;font-size:13px;color:rgba(184,204,228,.6);}
+.al-feat-ic{width:32px;height:32px;border-radius:9px;background:rgba(201,162,39,.1);border:1px solid rgba(201,162,39,.2);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.al-bottom{font-size:11px;color:rgba(184,204,228,.28);border-top:1px solid var(--bs);padding-top:20px;margin-top:40px;}
+
+.auth-right{background:linear-gradient(160deg,var(--navy3) 0%,var(--navy) 100%);padding:52px 48px;display:flex;flex-direction:column;justify-content:center;}
+@media(max-width:800px){.auth-left{padding:36px 28px;}.auth-right{padding:36px 28px;}.al-features{display:none;}}
+
+/* Role selector */
+.role-selector{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:32px;}
+.role-btn{padding:18px 14px;border-radius:16px;border:2px solid var(--bw);background:var(--g1);cursor:pointer;transition:all .25s var(--ease);text-align:center;}
+.role-btn:hover{border-color:rgba(201,162,39,.35);background:rgba(201,162,39,.04);}
+.role-btn.sel{border-color:var(--gold);background:rgba(201,162,39,.08);box-shadow:var(--glow);}
+.rb-ic{font-size:26px;margin-bottom:8px;}
+.rb-title{font-size:13.5px;font-weight:700;color:#fff;margin-bottom:3px;}
+.rb-sub{font-size:11px;color:rgba(184,204,228,.4);}
+
+/* Tabs */
+.auth-tabs{display:flex;gap:3px;background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:10px;padding:4px;margin-bottom:26px;}
+.at-pill{flex:1;padding:9px;border-radius:7px;border:none;background:transparent;font-family:var(--fs);font-size:12.5px;font-weight:600;color:rgba(184,204,228,.42);cursor:pointer;transition:all .2s;}
+.at-pill.on{background:linear-gradient(135deg,rgba(201,162,39,.15),rgba(201,162,39,.07));color:var(--gold3);border:1px solid rgba(201,162,39,.28);}
+
+/* Forms */
+.auth-form{display:none;}
+.auth-form.on{display:block;animation:fu .35s var(--ease);}
+@keyframes fu{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.form-title{font-family:var(--fse);font-size:1.6rem;font-weight:700;color:#fff;margin-bottom:5px;}
+.form-sub{font-size:12.5px;color:rgba(184,204,228,.42);margin-bottom:24px;line-height:1.5;}
+.fg{margin-bottom:15px;}
+.fg label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(184,204,228,.45);margin-bottom:7px;}
+.fg input,.fg select{width:100%;padding:12px 15px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:11px;color:#fff;font-family:var(--fs);font-size:13.5px;transition:all .2s var(--ease);outline:none;appearance:none;}
+.fg input:hover,.fg select:hover{border-color:rgba(201,162,39,.28);}
+.fg input:focus,.fg select:focus{border-color:var(--gold);background:rgba(201,162,39,.05);box-shadow:0 0 0 3px rgba(201,162,39,.1);}
+.fg input::placeholder{color:rgba(184,204,228,.22);}
+.fg select option{background:var(--navy3);color:#fff;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
+@media(max-width:500px){.form-row{grid-template-columns:1fr;}}
+.autofill-btn{display:flex;align-items:center;gap:8px;padding:9px 16px;border-radius:9px;background:rgba(201,162,39,.08);border:1px solid rgba(201,162,39,.2);color:var(--gold3);font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;margin-bottom:18px;font-family:var(--fs);}
+.autofill-btn:hover{background:rgba(201,162,39,.14);border-color:rgba(201,162,39,.4);}
+.btn-primary{width:100%;padding:13px;border-radius:11px;background:linear-gradient(135deg,var(--gold) 0%,var(--gold2) 50%,var(--gold) 100%);color:var(--navy);font-family:var(--fs);font-size:14px;font-weight:700;border:none;cursor:pointer;transition:all .25s var(--ease);margin-top:4px;letter-spacing:.02em;box-shadow:0 4px 16px rgba(201,162,39,.3);}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(201,162,39,.44);}
+.err-msg{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.3);border-radius:9px;padding:10px 14px;font-size:12.5px;color:var(--dsl);margin-bottom:14px;display:none;}
+.err-msg.show{display:block;}
+.switch-text{font-size:12px;color:rgba(184,204,228,.38);text-align:center;margin-top:16px;}
+.switch-text a{color:var(--gold3);cursor:pointer;font-weight:600;}
+
+/* ══════════════════════ LAYOUT (logged-in) ══════════════════════ */
+#s-app{flex-direction:row;}
+.sidebar{width:256px;background:linear-gradient(180deg,var(--navy2) 0%,var(--navy) 100%);border-right:1px solid var(--bs);display:flex;flex-direction:column;position:fixed;top:0;left:0;bottom:0;z-index:50;transition:transform .35s var(--ease);overflow-y:auto;}
+.sb-brand{padding:24px 20px 18px;border-bottom:1px solid var(--bs);}
+.sb-logo{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+.sb-shield svg{width:40px;height:46px;}
+.sb-uni{font-family:var(--fse);font-size:16px;font-weight:700;color:#fff;line-height:1.2;}
+.sb-sys{font-size:9px;letter-spacing:.18em;color:var(--gold3);text-transform:uppercase;font-weight:600;margin-top:1px;}
+.sb-tag{font-size:10px;color:rgba(184,204,228,.38);line-height:1.5;border-top:1px solid var(--bs);padding-top:10px;margin-top:8px;}
+/* User pill in sidebar */
+.sb-user{margin:14px 16px;padding:12px 14px;background:var(--g2);border:1px solid var(--bs);border-radius:14px;display:flex;align-items:center;gap:10px;}
+.sbu-av{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--gold) 0%,var(--gold3) 100%);display:flex;align-items:center;justify-content:center;font-family:var(--fse);font-size:15px;font-weight:700;color:var(--navy);flex-shrink:0;}
+.sbu-nm{font-size:13px;font-weight:600;color:#fff;line-height:1.2;}
+.sbu-role{font-size:10px;color:rgba(184,204,228,.38);}
+.sb-sec{padding:16px 20px 6px;font-size:9.5px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:rgba(184,204,228,.25);}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;color:rgba(184,204,228,.55);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s var(--ease);border-left:3px solid transparent;}
+.nav-item:hover{color:#fff;background:rgba(255,255,255,.04);border-left-color:rgba(201,162,39,.3);}
+.nav-item.on{color:var(--gold3);background:linear-gradient(90deg,rgba(201,162,39,.1) 0%,transparent 100%);border-left-color:var(--gold2);}
+.nav-ic{width:30px;height:30px;display:flex;align-items:center;justify-content:center;border-radius:8px;background:rgba(255,255,255,.04);font-size:14px;flex-shrink:0;transition:all .2s;}
+.nav-item.on .nav-ic{background:rgba(201,162,39,.13);}
+.nav-badge{margin-left:auto;background:var(--gold);color:var(--navy);font-size:10px;font-weight:700;border-radius:10px;padding:2px 7px;}
+.nav-badge.red{background:var(--ds);color:#fff;}
+.sb-foot{margin-top:auto;padding:16px 20px;border-top:1px solid var(--bs);}
+.logout-btn{display:flex;align-items:center;gap:9px;width:100%;padding:10px 13px;border-radius:10px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);color:var(--dsl);font-size:12.5px;font-weight:600;cursor:pointer;transition:all .2s;font-family:var(--fs);}
+.logout-btn:hover{background:rgba(239,68,68,.15);border-color:var(--ds);}
+.sys-dot{display:flex;align-items:center;gap:8px;font-size:11px;color:rgba(184,204,228,.4);padding:9px 13px;background:var(--g2);border:1px solid var(--bs);border-radius:10px;margin-bottom:10px;}
+.dot-g{width:7px;height:7px;border-radius:50%;background:var(--gsl);box-shadow:0 0 7px var(--gs);animation:blink 2.5s infinite;}
+@keyframes blink{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.75);}}
+
+/* Main content */
+.main{margin-left:256px;flex:1;min-height:100vh;}
+.topbar{height:60px;background:rgba(7,18,36,.94);backdrop-filter:blur(24px);border-bottom:1px solid var(--bs);display:flex;align-items:center;padding:0 28px;gap:12px;position:sticky;top:0;z-index:40;}
+.tb-bc{display:flex;align-items:center;gap:7px;font-size:12px;color:rgba(184,204,228,.4);}
+.tb-cur{color:#fff;font-weight:600;}
+.tb-r{margin-left:auto;display:flex;align-items:center;gap:11px;}
+.tb-clk{font-family:var(--fmo);font-size:12px;color:var(--gold2);background:rgba(201,162,39,.08);border:1px solid rgba(201,162,39,.2);padding:5px 11px;border-radius:6px;}
+.hbtn{display:none;background:none;border:none;color:#fff;font-size:22px;cursor:pointer;padding:4px;}
+
+/* Pages */
+.page{display:none;}
+.page.on{display:block;animation:pageIn .4s var(--ease) both;}
+@keyframes pageIn{from{opacity:0;transform:translateY(13px);}to{opacity:1;transform:translateY(0);}}
+.pi{padding:32px 32px;max-width:1200px;}
+.pi.wide{max-width:100%;padding:0;}
+
+/* Page header */
+.phd{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:30px;gap:16px;flex-wrap:wrap;}
+.phd-l{display:flex;align-items:center;gap:15px;}
+.phd-ic{width:52px;height:52px;background:linear-gradient(135deg,rgba(201,162,39,.14),rgba(201,162,39,.05));border:1px solid rgba(201,162,39,.28);border-radius:15px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.phd-h{font-family:var(--fse);font-size:1.8rem;font-weight:700;color:#fff;line-height:1.15;}
+.phd-s{font-size:12.5px;color:rgba(184,204,228,.42);margin-top:2px;}
+.phd-acts{display:flex;gap:9px;align-items:center;flex-wrap:wrap;}
+
+/* Cards */
+.card{background:linear-gradient(135deg,rgba(19,40,80,.72),rgba(10,24,48,.52));border:1px solid var(--bs);border-radius:22px;padding:24px;backdrop-filter:blur(12px);position:relative;transition:all .3s var(--ease);}
+.card::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent);}
+.card:hover{border-color:rgba(201,162,39,.2);box-shadow:var(--sh);}
+.card-title{font-family:var(--fse);font-size:1.1rem;font-weight:700;color:#fff;margin-bottom:4px;}
+.card-sub{font-size:12px;color:rgba(184,204,228,.4);margin-bottom:18px;}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:.15em;text-transform:uppercase;color:rgba(201,162,39,.68);margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.sec-lbl::before{content:'';display:inline-block;width:13px;height:2px;background:var(--gold);border-radius:2px;}
+
+/* Stat cards */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px;}
+.sc{background:linear-gradient(135deg,rgba(19,40,80,.8),rgba(10,24,48,.6));border:1px solid var(--bs);border-radius:20px;padding:20px 18px;position:relative;overflow:hidden;transition:all .3s var(--ease);}
+.sc:hover{transform:translateY(-3px);border-color:rgba(201,162,39,.26);box-shadow:0 16px 48px rgba(0,0,0,.4),var(--glow);}
+.sc::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.45;}
+.sc.s{;}.sc.s::after{background:linear-gradient(90deg,transparent,var(--gs),transparent);}
+.sc.d::after{background:linear-gradient(90deg,transparent,var(--ds),transparent);}
+.sc.w::after{background:linear-gradient(90deg,transparent,var(--ws),transparent);}
+.sc-ic{position:absolute;top:16px;right:16px;font-size:20px;opacity:.2;}
+.sc-lbl{font-size:10.5px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(184,204,228,.38);margin-bottom:8px;}
+.sc-val{font-family:var(--fse);font-size:2.4rem;font-weight:700;color:#fff;line-height:1;margin-bottom:6px;}
+.sc-trend{font-size:11px;}.sc-trend.u{color:var(--gsl);}.sc-trend.d{color:var(--dsl);}.sc-trend.f{color:rgba(184,204,228,.35);}
+
+/* Buttons */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:11px 20px;border-radius:11px;font-family:var(--fs);font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .25s var(--ease);white-space:nowrap;}
+.btn-g{background:linear-gradient(135deg,var(--gold),var(--gold2),var(--gold));color:var(--navy);box-shadow:0 4px 14px rgba(201,162,39,.3);}
+.btn-g:hover{transform:translateY(-2px);box-shadow:0 8px 26px rgba(201,162,39,.42);}
+.btn-gh{background:var(--g2);border:1px solid var(--bw);color:rgba(184,204,228,.68);}
+.btn-gh:hover{color:#fff;border-color:rgba(201,162,39,.35);background:rgba(255,255,255,.07);}
+.btn-s{background:linear-gradient(135deg,var(--gsd),#065f46);border:1px solid rgba(16,185,129,.35);color:var(--gsl);}
+.btn-s:hover{border-color:var(--gs);box-shadow:var(--glows);}
+.btn-d{background:linear-gradient(135deg,var(--dsd),#991b1b);border:1px solid rgba(239,68,68,.35);color:var(--dsl);}
+.btn-d:hover{border-color:var(--ds);box-shadow:var(--glowd);}
+.btn-sm{padding:7px 13px;font-size:12px;border-radius:8px;}
+.btn-full{width:100%;justify-content:center;}
+
+/* Forms */
+.fg2{margin-bottom:16px;}
+.fg2 label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(184,204,228,.45);margin-bottom:6px;}
+.inp,.sel,.ta{width:100%;padding:11px 14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:11px;color:#fff;font-family:var(--fs);font-size:13.5px;transition:all .2s var(--ease);outline:none;appearance:none;}
+.inp:focus,.sel:focus,.ta:focus{border-color:var(--gold);background:rgba(201,162,39,.05);box-shadow:0 0 0 3px rgba(201,162,39,.1);}
+.inp::placeholder{color:rgba(184,204,228,.2);}
+.ta{resize:vertical;min-height:85px;}
+.sel option{background:var(--navy3);color:#fff;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+@media(max-width:550px){.frow{grid-template-columns:1fr;}}
+
+/* Badges */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:10.5px;font-weight:700;letter-spacing:.04em;}
+.b-p{background:rgba(245,158,11,.12);color:var(--wsl);border:1px solid rgba(245,158,11,.26);}
+.b-a{background:rgba(16,185,129,.12);color:var(--gsl);border:1px solid rgba(16,185,129,.26);}
+.b-r{background:rgba(239,68,68,.12);color:var(--dsl);border:1px solid rgba(239,68,68,.26);}
+.b-i{background:rgba(201,162,39,.12);color:var(--gold3);border:1px solid rgba(201,162,39,.26);}
+
+/* Tabs */
+.tabs{display:flex;gap:3px;background:rgba(255,255,255,.03);border:1px solid var(--bs);border-radius:11px;padding:4px;margin-bottom:18px;}
+.tab{flex:1;padding:9px 10px;border-radius:8px;border:none;background:transparent;font-family:var(--fs);font-size:12px;font-weight:600;color:rgba(184,204,228,.4);cursor:pointer;transition:all .2s;white-space:nowrap;}
+.tab:hover{color:rgba(184,204,228,.75);background:rgba(255,255,255,.04);}
+.tab.on{background:linear-gradient(135deg,rgba(201,162,39,.14),rgba(201,162,39,.07));color:var(--gold3);border:1px solid rgba(201,162,39,.26);}
+
+/* Stepper */
+.stepper{display:flex;align-items:center;margin-bottom:30px;overflow-x:auto;padding-bottom:4px;}
+.sn{display:flex;align-items:center;gap:10px;flex-shrink:0;}
+.sc2{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;border:2px solid rgba(184,204,228,.15);color:rgba(184,204,228,.25);transition:all .3s var(--ease);flex-shrink:0;}
+.sn.done .sc2{background:var(--gsd);border-color:var(--gs);color:var(--gsl);box-shadow:var(--glows);}
+.sn.act .sc2{background:linear-gradient(135deg,#c9920a,var(--gold2));border-color:var(--gold3);color:var(--navy);box-shadow:0 0 18px rgba(201,162,39,.36);}
+.s-lbl{font-size:12px;font-weight:600;color:rgba(184,204,228,.35);}
+.sn.act .s-lbl{color:var(--gold3);}
+.sn.done .s-lbl{color:var(--gsl);}
+.sline{flex:1;min-width:26px;height:1px;background:rgba(184,204,228,.1);margin:0 10px;transition:background .3s;}
+.sline.done{background:var(--gs);}
+
+/* Capture zone */
+.czone{position:relative;background:rgba(4,12,26,.8);border:2px dashed rgba(201,162,39,.2);border-radius:20px;overflow:hidden;cursor:pointer;transition:border-color .3s;}
+.czone:hover{border-color:rgba(201,162,39,.45);}
+.czone.scanning{border-style:solid;border-color:var(--gold);}
+.czone.done{border-style:solid;border-color:var(--gs);}
+.czc::before,.czc::after,.czc .cbr,.czc .cbl{content:'';position:absolute;width:24px;height:24px;border-color:var(--gold2);border-style:solid;z-index:5;}
+.czc::before{top:12px;left:12px;border-width:2px 0 0 2px;}
+.czc::after{top:12px;right:12px;border-width:2px 2px 0 0;}
+.czc .cbr{bottom:12px;right:12px;border-width:0 2px 2px 0;}
+.czc .cbl{bottom:12px;left:12px;border-width:0 0 2px 2px;}
+.cz-ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;z-index:4;background:rgba(4,12,26,.55);transition:opacity .3s;}
+.cz-ic{font-size:48px;opacity:.4;}
+.cz-txt{font-size:13px;color:rgba(184,204,228,.52);text-align:center;}
+.cz-hint{font-size:11px;color:rgba(184,204,228,.26);text-align:center;}
+.sweep{position:absolute;left:0;right:0;height:3px;z-index:6;background:linear-gradient(90deg,transparent,var(--gold2),transparent);box-shadow:0 0 11px var(--gold);display:none;}
+.czone.scanning .sweep{display:block;animation:sw 1.8s ease-in-out infinite;}
+@keyframes sw{0%{top:8%;opacity:.6;}50%{opacity:1;}100%{top:92%;opacity:.6;}}
+.cz-res{position:absolute;inset:0;z-index:3;display:none;}
+.cz-res.show{display:block;}
+.cz-res canvas{width:100%;height:100%;}
+
+/* OCR panel */
+.ocr-panel{background:linear-gradient(135deg,rgba(201,162,39,.06),rgba(201,162,39,.02));border:1px solid rgba(201,162,39,.18);border-radius:16px;padding:18px;display:none;}
+.ocr-panel.show{display:block;animation:fu .4s var(--ease);}
+.ocr-hd{display:flex;align-items:center;gap:9px;margin-bottom:13px;padding-bottom:10px;border-bottom:1px solid rgba(201,162,39,.12);}
+.ocr-led{width:7px;height:7px;border-radius:50%;background:var(--gsl);box-shadow:0 0 7px var(--gs);animation:blink 1.5s infinite;}
+.ocr-ttl{font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold3);}
+.ocr-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.of .ok{font-size:10px;color:rgba(184,204,228,.35);text-transform:uppercase;letter-spacing:.1em;font-weight:600;margin-bottom:2px;}
+.of .ov{font-size:13px;color:#fff;font-weight:500;}
+.of .ov.mono{font-family:var(--fmo);color:var(--gold3);font-size:12.5px;}
+
+/* Face slots */
+.face-slots{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px;}
+.fs{aspect-ratio:3/4;background:rgba(4,12,26,.7);border:2px dashed rgba(184,204,228,.12);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;cursor:pointer;transition:all .3s var(--ease);position:relative;overflow:hidden;}
+.fs:hover{border-color:rgba(201,162,39,.35);}
+.fs.cap{border-style:solid;border-color:var(--gs);}
+.fs .fs-ic{font-size:30px;opacity:.35;z-index:2;}
+.fs .fs-lb{font-size:10.5px;color:rgba(184,204,228,.35);text-align:center;z-index:2;}
+.fs.cap .fs-ic{opacity:0;}
+.fs-ck{position:absolute;top:8px;right:8px;width:23px;height:23px;background:var(--gs);border-radius:50%;display:none;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:var(--navy);z-index:10;box-shadow:var(--glows);}
+.fs.cap .fs-ck{display:flex;animation:pop .4s var(--spring);}
+@keyframes pop{from{transform:scale(0);opacity:0;}to{transform:scale(1);opacity:1;}}
+.fs-cv{position:absolute;inset:0;display:none;}
+.fs.cap .fs-cv{display:block;}
+.fs-cv canvas{width:100%;height:100%;}
+.fs-ovl{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(0deg,rgba(4,12,26,.9),transparent);padding:18px 8px 8px;text-align:center;z-index:5;display:none;}
+.fs.cap .fs-ovl{display:block;}
+.prog-bar{background:rgba(255,255,255,.05);border-radius:99px;height:5px;overflow:hidden;margin-bottom:6px;}
+.prog-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--gsd),var(--gsl));transition:width .6s var(--ease);}
+.embed-panel{background:rgba(16,185,129,.05);border:1px solid rgba(16,185,129,.16);border-radius:14px;padding:16px 18px;display:none;}
+.embed-panel.show{display:block;animation:fu .4s var(--ease);}
+.er{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.er:last-child{border-bottom:none;}
+.ek{font-size:11px;color:rgba(184,204,228,.4);width:150px;flex-shrink:0;}
+.ev{font-family:var(--fmo);font-size:12px;color:var(--gsl);font-weight:500;}
+
+/* Request cards */
+.req-feed{display:flex;flex-direction:column;gap:10px;}
+.req-card{background:linear-gradient(135deg,rgba(19,40,80,.6),rgba(10,24,48,.42));border:1px solid var(--bs);border-radius:20px;padding:18px 20px;display:flex;align-items:flex-start;gap:14px;transition:all .25s var(--ease);}
+.req-card:hover{border-color:rgba(201,162,39,.26);transform:translateY(-1px);box-shadow:var(--sh);}
+.req-av{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-family:var(--fse);font-size:18px;font-weight:700;flex-shrink:0;border:1px solid rgba(201,162,39,.18);background:linear-gradient(135deg,rgba(201,162,39,.13),rgba(19,40,80,.8));color:var(--gold3);}
+.req-body{flex:1;min-width:0;}
+.req-nm{font-size:14px;color:#fff;font-weight:600;margin-bottom:2px;}
+.req-meta{font-size:11.5px;color:rgba(184,204,228,.4);margin-bottom:6px;}
+.req-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:6px;}
+.req-rsn{background:rgba(255,255,255,.03);border-left:2px solid rgba(201,162,39,.26);border-radius:0 6px 6px 0;padding:6px 10px;font-size:12px;color:rgba(184,204,228,.55);line-height:1.5;}
+.req-rmk{font-size:11px;color:rgba(184,204,228,.3);margin-top:4px;font-style:italic;}
+.req-acts{display:flex;gap:7px;align-items:flex-start;flex-shrink:0;flex-wrap:wrap;}
+
+/* Notification banner */
+.notif-banner{display:flex;align-items:flex-start;gap:14px;padding:16px 18px;background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(16,185,129,.03));border:1px solid rgba(16,185,129,.2);border-radius:16px;margin-bottom:20px;animation:fu .5s var(--ease);}
+.nb-ic{font-size:28px;flex-shrink:0;}
+.nb-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:3px;}
+.nb-body{font-size:12.5px;color:rgba(184,204,228,.6);line-height:1.5;}
+
+/* Profile card */
+.prof-card{background:linear-gradient(135deg,rgba(19,40,80,.9),rgba(10,24,48,.7));border:1px solid rgba(201,162,39,.22);border-radius:24px;overflow:hidden;box-shadow:var(--shl);}
+.pc-hd{padding:24px 24px 0;background:linear-gradient(135deg,rgba(201,162,39,.07),transparent 60%);display:flex;align-items:flex-start;gap:17px;border-bottom:1px solid rgba(201,162,39,.12);padding-bottom:20px;}
+.pc-ph{width:80px;height:80px;border-radius:16px;border:2px solid var(--gold);overflow:hidden;flex-shrink:0;box-shadow:var(--glow);}
+.pc-ph canvas{width:100%;height:100%;}
+.pc-nm{font-family:var(--fse);font-size:1.4rem;color:#fff;font-weight:700;line-height:1.2;margin-bottom:3px;}
+.pc-roll{font-family:var(--fmo);font-size:12px;color:var(--gold3);margin-bottom:8px;}
+.pc-body{padding:20px 24px;}
+.pc-fields{display:grid;grid-template-columns:1fr 1fr;gap:14px 20px;margin-bottom:16px;}
+.pf-k{font-size:10px;color:rgba(184,204,228,.3);text-transform:uppercase;letter-spacing:.1em;font-weight:700;margin-bottom:2px;}
+.pf-v{font-size:13px;color:rgba(184,204,228,.8);font-weight:500;}
+.ec-strip{display:flex;gap:6px;flex-wrap:wrap;padding-top:14px;border-top:1px solid var(--bs);}
+.ec-chip{display:flex;align-items:center;gap:4px;padding:4px 10px;background:rgba(16,185,129,.08);border:1px solid rgba(16,185,129,.16);border-radius:20px;font-size:11px;color:var(--gsl);font-weight:600;}
+
+/* Gate status card (student view) */
+.gate-status-card{border-radius:20px;padding:24px;text-align:center;margin-bottom:20px;}
+.gsc-none{background:rgba(255,255,255,.03);border:1px solid var(--bw);}
+.gsc-pending{background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.25);}
+.gsc-approved{background:rgba(16,185,129,.07);border:1px solid rgba(16,185,129,.28);box-shadow:var(--glows);}
+.gsc-rejected{background:rgba(239,68,68,.07);border:1px solid rgba(239,68,68,.28);box-shadow:var(--glowd);}
+.gsc-ic{font-size:48px;margin-bottom:12px;}
+.gsc-title{font-family:var(--fse);font-size:1.5rem;font-weight:700;color:#fff;margin-bottom:6px;}
+.gsc-sub{font-size:13px;color:rgba(184,204,228,.5);margin-bottom:16px;}
+.gsc-details{display:grid;grid-template-columns:1fr 1fr;gap:10px;text-align:left;background:rgba(255,255,255,.03);border-radius:12px;padding:14px 16px;margin-bottom:16px;}
+.gsd-k{font-size:10.5px;color:rgba(184,204,228,.35);text-transform:uppercase;letter-spacing:.09em;margin-bottom:2px;}
+.gsd-v{font-size:13px;color:#fff;font-weight:500;}
+
+/* Gate scanner */
+.scan-layout{display:grid;grid-template-columns:1fr 385px;min-height:calc(100vh - 60px);}
+@media(max-width:900px){.scan-layout{grid-template-columns:1fr;}.scan-sb{border-left:none;border-top:1px solid var(--bs);max-height:420px;overflow-y:auto;}}
+.scan-main{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:36px 32px;gap:20px;background:radial-gradient(ellipse 60% 50% at 50% 40%,rgba(201,162,39,.05) 0%,transparent 70%);}
+.scan-hd{text-align:center;}
+.scan-ey{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:var(--gold);font-weight:700;margin-bottom:5px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.scan-h2{font-family:var(--fse);font-size:1.6rem;color:#fff;font-weight:700;margin-bottom:3px;}
+.scan-sub{font-size:13px;color:rgba(184,204,228,.4);}
+.scan-vp{width:100%;max-width:560px;aspect-ratio:16/10;background:#020812;border:2px solid rgba(201,162,39,.2);border-radius:20px;position:relative;overflow:hidden;box-shadow:0 0 0 1px rgba(201,162,39,.06),var(--shl);}
+.vp-scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--gold2),transparent);box-shadow:0 0 13px var(--gold);z-index:10;display:none;animation:vsc 2s linear infinite;}
+.scan-vp.live .vp-scan{display:block;}
+@keyframes vsc{from{top:5%;opacity:.6;}50%{opacity:1;}to{top:95%;opacity:.6;}}
+.vpc{position:absolute;width:22px;height:22px;z-index:8;}
+.vpc.tl{top:12px;left:12px;border-top:2px solid var(--gold2);border-left:2px solid var(--gold2);}
+.vpc.tr{top:12px;right:12px;border-top:2px solid var(--gold2);border-right:2px solid var(--gold2);}
+.vpc.bl{bottom:12px;left:12px;border-bottom:2px solid var(--gold2);border-left:2px solid var(--gold2);}
+.vpc.br{bottom:12px;right:12px;border-bottom:2px solid var(--gold2);border-right:2px solid var(--gold2);}
+.vp-idle{position:absolute;inset:0;z-index:5;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;}
+.vp-idle-ic{font-size:56px;opacity:.17;}
+.vp-idle-txt{font-size:13px;color:rgba(184,204,228,.2);text-align:center;}
+.vp-face{position:absolute;inset:0;z-index:4;display:none;}
+.vp-face.show{display:block;}
+.vp-face canvas{width:100%;height:100%;}
+.vp-el{position:absolute;top:50%;left:50%;transform:translate(-50%,-54%);width:190px;height:238px;border:2px solid rgba(201,162,39,.42);border-radius:50%;z-index:7;display:none;animation:elp 1.8s ease infinite;}
+.vp-el.show{display:block;}
+.vp-el.ver{border-color:var(--gs);animation:elv 1.5s ease infinite;}
+.vp-el.den{border-color:var(--ds);animation:eld .8s ease infinite;}
+@keyframes elp{0%,100%{border-color:rgba(201,162,39,.42);}50%{border-color:rgba(201,162,39,.9);}}
+@keyframes elv{0%,100%{border-color:rgba(16,185,129,.6);box-shadow:0 0 16px rgba(16,185,129,.2);}50%{border-color:rgba(52,211,153,1);}}
+@keyframes eld{0%,100%{border-color:rgba(239,68,68,.6);}50%{border-color:rgba(239,68,68,1);box-shadow:0 0 20px rgba(239,68,68,.3);}}
+.vp-strip{position:absolute;bottom:0;left:0;right:0;z-index:9;background:linear-gradient(0deg,rgba(2,8,18,.98),rgba(2,8,18,.7) 60%,transparent);padding:32px 16px 14px;display:none;}
+.vp-strip.show{display:block;animation:fu .4s var(--ease);}
+.vs-nm{font-family:var(--fse);font-size:1.15rem;color:#fff;font-weight:700;}
+.vs-roll{font-family:var(--fmo);font-size:11px;color:var(--gold3);margin-bottom:4px;}
+.vs-tags{display:flex;gap:8px;flex-wrap:wrap;}
+.vs-tag{font-size:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);padding:2px 8px;border-radius:9px;color:rgba(184,204,228,.65);}
+.scan-ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:center;}
+.scan-sb{border-left:1px solid var(--bs);background:linear-gradient(180deg,rgba(7,18,36,.97),rgba(4,12,26,.99));backdrop-filter:blur(20px);display:flex;flex-direction:column;overflow-y:auto;}
+.ss-sec{padding:18px 20px;border-bottom:1px solid var(--bs);}
+.ss-ttl{font-size:10px;font-weight:700;letter-spacing:.17em;text-transform:uppercase;color:rgba(184,204,228,.26);margin-bottom:13px;display:flex;align-items:center;gap:8px;}
+.ss-ttl::before{content:'';width:4px;height:4px;border-radius:50%;background:var(--gold);box-shadow:0 0 7px var(--gold);}
+.ai-step{display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.04);transition:all .3s;}
+.ai-step:last-child{border-bottom:none;}
+.ai-b{width:33px;height:33px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:14px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);transition:all .3s;flex-shrink:0;}
+.ai-step.sa .ai-b{background:rgba(201,162,39,.12);border-color:rgba(201,162,39,.26);animation:sp 1s linear infinite;}
+@keyframes sp{to{transform:rotate(360deg);}}
+.ai-step.sd .ai-b{background:rgba(16,185,129,.12);border-color:rgba(16,185,129,.26);}
+.ai-step.sf .ai-b{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.26);}
+.ai-nm{font-size:13px;color:rgba(184,204,228,.75);font-weight:500;}
+.ai-sb{font-size:10px;color:rgba(184,204,228,.3);}
+.ai-st{font-size:10.5px;font-weight:700;}
+.ai-st.idle{color:rgba(184,204,228,.2);}
+.ai-st.act{color:var(--gold3);}
+.ai-st.done{color:var(--gsl);}
+.ai-st.fail{color:var(--dsl);}
+.conf-n{font-family:var(--fmo);font-size:2.8rem;font-weight:600;color:#fff;line-height:1;margin-bottom:8px;transition:all .3s;}
+.conf-u{font-size:13px;color:rgba(184,204,228,.35);font-family:var(--fmo);}
+.conf-tr{background:rgba(255,255,255,.05);border-radius:99px;height:5px;overflow:hidden;margin-bottom:5px;}
+.conf-fi{height:100%;border-radius:99px;background:linear-gradient(90deg,#10b981,#34d399);transition:width 1.2s ease;box-shadow:0 0 7px rgba(16,185,129,.4);}
+.conf-d{font-size:10.5px;color:rgba(184,204,228,.3);}
+.pt-row{display:flex;justify-content:space-between;align-items:flex-start;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.04);gap:8px;}
+.pt-row:last-child{border-bottom:none;}
+.pt-k{font-size:11px;color:rgba(184,204,228,.3);flex-shrink:0;}
+.pt-v{font-size:12px;color:rgba(184,204,228,.8);font-weight:500;text-align:right;}
+.vbox{border-radius:14px;padding:18px;text-align:center;border:2px solid transparent;transition:all .4s var(--ease);margin:4px;}
+.vbox.idle{background:rgba(255,255,255,.03);border-color:rgba(255,255,255,.07);}
+.vbox.allowed{background:rgba(16,185,129,.07);border-color:rgba(16,185,129,.32);box-shadow:var(--glows);animation:vp .5s var(--spring);}
+.vbox.denied{background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.32);box-shadow:var(--glowd);animation:vs .5s var(--ease);}
+.vbox.unregistered{background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.32);}
+@keyframes vp{from{transform:scale(.93);opacity:.5;}to{transform:scale(1);opacity:1;}}
+@keyframes vs{0%,100%{transform:translateX(0);}25%{transform:translateX(-5px);}75%{transform:translateX(5px);}}
+.gv-lbl{font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:rgba(184,204,228,.28);margin-bottom:6px;}
+.gv-txt{font-family:var(--fse);font-size:1.7rem;font-weight:700;letter-spacing:.04em;margin-bottom:3px;}
+.vbox.idle .gv-txt{color:rgba(184,204,228,.17);}
+.vbox.allowed .gv-txt{color:var(--gsl);}
+.vbox.denied .gv-txt{color:var(--dsl);}
+.vbox.unregistered .gv-txt{color:var(--wsl);}
+.gv-sub{font-size:11.5px;color:rgba(184,204,228,.34);}
+
+/* Analytics charts */
+.chart-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:20px;}
+@media(max-width:700px){.chart-grid{grid-template-columns:1fr;}}
+.chart-card{background:linear-gradient(135deg,rgba(19,40,80,.7),rgba(10,24,48,.5));border:1px solid var(--bs);border-radius:20px;padding:22px;backdrop-filter:blur(12px);}
+.cc-ttl{font-size:13.5px;font-weight:700;color:#fff;margin-bottom:3px;}
+.cc-sub{font-size:11px;color:rgba(184,204,228,.3);margin-bottom:18px;}
+.bc-row{display:flex;align-items:center;gap:10px;margin-bottom:11px;}
+.bc-lbl{font-size:11.5px;color:rgba(184,204,228,.5);width:86px;flex-shrink:0;}
+.bc-tr{flex:1;background:rgba(255,255,255,.04);border-radius:99px;height:8px;overflow:hidden;}
+.bc-fi{height:100%;border-radius:99px;background:linear-gradient(90deg,#c9920a,var(--gold3));transition:width 1.2s ease;}
+.bc-fi.s{background:linear-gradient(90deg,var(--gsd),var(--gsl));}
+.bc-vl{font-family:var(--fmo);font-size:11px;color:var(--gold3);width:26px;text-align:right;}
+.trend-chart{display:flex;align-items:flex-end;gap:9px;height:95px;padding-top:8px;}
+.tc-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;}
+.tc-bw{flex:1;width:100%;display:flex;align-items:flex-end;}
+.tc-bar{width:100%;border-radius:5px 5px 0 0;background:linear-gradient(180deg,rgba(201,162,39,.68),rgba(201,162,39,.18));}
+.tc-bar.today{background:linear-gradient(180deg,var(--gold2),rgba(201,162,39,.36));box-shadow:0 0 14px rgba(201,162,39,.26);}
+.tc-lb{font-size:10px;color:rgba(184,204,228,.26);}
+.tc-lb.today{color:var(--gold3);font-weight:700;}
+.act-table{width:100%;border-collapse:collapse;}
+.act-table th{text-align:left;font-size:10px;font-weight:700;letter-spacing:.13em;text-transform:uppercase;color:rgba(184,204,228,.26);padding:0 0 10px;border-bottom:1px solid var(--bs);}
+.act-table td{padding:11px 0;border-bottom:1px solid rgba(255,255,255,.04);font-size:12.5px;color:rgba(184,204,228,.65);}
+.act-table tr:last-child td{border-bottom:none;}
+.act-table td:first-child{color:#fff;font-weight:600;}
+
+/* Notification phone mockup */
+.phone-shell{background:#101820;border:3px solid rgba(255,255,255,.1);border-radius:44px;padding:16px 9px;box-shadow:0 0 0 1px rgba(255,255,255,.04),0 28px 78px rgba(0,0,0,.8);}
+.ph-notch-w{display:flex;justify-content:center;margin-bottom:12px;}
+.ph-notch{width:105px;height:26px;background:#101820;border:3px solid rgba(255,255,255,.1);border-top:none;border-radius:0 0 17px 17px;}
+.ph-screen{background:linear-gradient(160deg,#0f1e35,#0a1320);border-radius:34px;overflow:hidden;min-height:480px;}
+.ph-sb{display:flex;justify-content:space-between;align-items:center;padding:7px 18px 4px;font-size:11px;color:rgba(255,255,255,.8);font-weight:600;}
+.np{margin:6px 11px;background:rgba(255,255,255,.1);backdrop-filter:blur(20px);border-radius:20px;padding:13px 14px;border:1px solid rgba(255,255,255,.12);animation:nsl .45s var(--spring);}
+@keyframes nsl{from{transform:translateY(-26px) scale(.94);opacity:0;}to{transform:translateY(0) scale(1);opacity:1;}}
+.np-hd{display:flex;align-items:center;gap:9px;margin-bottom:8px;}
+.np-ic{width:32px;height:32px;background:linear-gradient(135deg,var(--gold),var(--gold3));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;color:var(--navy);flex-shrink:0;}
+.np-an{font-size:12px;color:rgba(255,255,255,.88);font-weight:700;}
+.np-tm{margin-left:auto;font-size:11px;color:rgba(255,255,255,.35);}
+.np-title{font-size:13px;color:#fff;font-weight:700;margin-bottom:4px;}
+.np-body{font-size:12px;color:rgba(255,255,255,.7);line-height:1.45;}
+.np-chips{display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:10px;padding-top:9px;border-top:1px solid rgba(255,255,255,.09);}
+.nc-k{font-size:9px;text-transform:uppercase;letter-spacing:.1em;color:rgba(255,255,255,.3);margin-bottom:1px;}
+.nc-v{font-size:11px;color:rgba(255,255,255,.8);font-weight:600;}
+.wa-wrap{margin:7px 11px;}
+.wa-hd{background:#075e54;padding:10px 13px;display:flex;align-items:center;gap:8px;border-radius:13px 13px 0 0;}
+.wa-av{width:33px;height:33px;border-radius:50%;background:var(--gold2);display:flex;align-items:center;justify-content:center;font-size:16px;}
+.wa-nm{font-size:12px;color:#fff;font-weight:700;}
+.wa-sub{font-size:10px;color:rgba(255,255,255,.55);}
+.wa-body{background:#ece5dd;padding:10px;border-radius:0 0 13px 13px;}
+.wa-bub{background:#fff;border-radius:0 12px 12px 12px;padding:8px 12px;max-width:92%;box-shadow:0 1px 3px rgba(0,0,0,.13);}
+.wa-txt{font-size:12px;color:#303030;line-height:1.5;font-family:sans-serif;}
+.wa-time{font-size:10px;color:#999;text-align:right;margin-top:2px;}
+
+/* Modal */
+.modal-bd{position:fixed;inset:0;z-index:200;background:rgba(2,8,18,.78);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s;}
+.modal-bd.open{opacity:1;pointer-events:all;}
+.modal-box{background:linear-gradient(135deg,var(--navy4),var(--navy2));border:1px solid rgba(201,162,39,.22);border-radius:24px;padding:28px;max-width:480px;width:100%;transform:scale(.94) translateY(10px);transition:transform .35s var(--spring);box-shadow:var(--shl);}
+.modal-bd.open .modal-box{transform:scale(1) translateY(0);}
+.m-ttl{font-family:var(--fse);font-size:1.3rem;color:#fff;font-weight:700;margin-bottom:4px;}
+.m-desc{font-size:12.5px;color:rgba(184,204,228,.4);margin-bottom:18px;line-height:1.5;}
+.m-foot{display:flex;gap:9px;justify-content:flex-end;margin-top:18px;}
+
+/* Toast */
+.toast{position:fixed;bottom:24px;right:24px;background:var(--navy4);border:1px solid rgba(201,162,39,.22);border-radius:14px;padding:12px 18px;display:flex;align-items:center;gap:10px;z-index:999;max-width:330px;transform:translateY(100px) scale(.96);opacity:0;transition:all .4s var(--spring);box-shadow:var(--shl);pointer-events:none;}
+.toast.show{transform:translateY(0) scale(1);opacity:1;}
+.t-ic{font-size:18px;flex-shrink:0;}
+.t-msg{font-size:13px;color:rgba(184,204,228,.88);font-weight:500;}
+
+/* Utils */
+@keyframes fu{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.flex{display:flex;}.ic{align-items:center;}.jb{justify-content:space-between;}.g2{gap:8px;}.g3{gap:12px;}.wrap{flex-wrap:wrap;}.mt3{margin-top:12px;}.mt4{margin-top:16px;}.mt5{margin-top:20px;}.mt6{margin-top:24px;}.mb2{margin-bottom:8px;}.hidden{display:none!important;}.mono{font-family:var(--fmo);}
+::-webkit-scrollbar{width:5px;height:5px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(201,162,39,.2);border-radius:99px;}
+@media(max-width:1024px){.sidebar{transform:translateX(-100%);}.sidebar.open{transform:translateX(0);}.main{margin-left:0;}.hbtn{display:block;}}
+@media(max-width:768px){.pi{padding:18px;}.stat-grid{grid-template-columns:repeat(2,1fr);}.pc-fields{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="bgl"></div><div class="bgg"></div>
+<div id="app">
+
+<!-- ══════════════════════ AUTH SCREEN ══════════════════════ -->
+<div class="screen on" id="s-auth">
+  <div class="auth-wrap">
+    <!-- Left panel -->
+    <div class="auth-left">
+      <div>
+        <div class="al-logo">
+          <div class="al-shield">
+            <svg viewBox="0 0 46 52" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M23 2L42 10V26C42 36.5 33.5 46 23 50C12.5 46 4 36.5 4 26V10L23 2Z" fill="url(#sg2)" stroke="url(#ss2)" stroke-width="1.2"/>
+              <path d="M23 9L36 14.5V26C36 33 30 40 23 43C16 40 10 33 10 26V14.5L23 9Z" fill="rgba(255,255,255,0.04)"/>
+              <text x="23" y="33" text-anchor="middle" font-family="serif" font-size="13" font-weight="900" fill="url(#st2)">GU</text>
+              <defs>
+                <linearGradient id="sg2" x1="4" y1="2" x2="42" y2="50" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#d4a017"/><stop offset="100%" stop-color="#9a7400"/></linearGradient>
+                <linearGradient id="ss2" x1="4" y1="2" x2="42" y2="50" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#e0b030"/><stop offset="100%" stop-color="#c9920a"/></linearGradient>
+                <linearGradient id="st2" x1="15" y1="22" x2="31" y2="34" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fdf0c0"/><stop offset="100%" stop-color="#e0b030"/></linearGradient>
+              </defs>
+            </svg>
+          </div>
+          <div><div class="al-uni">Garrison University</div><div class="al-sys">SCEMS v2.0</div></div>
+        </div>
+        <div class="al-hero">
+          <div class="al-h1">Smart Campus<br><span>Exit Monitoring</span><br>System</div>
+          <div class="al-desc">AI-powered biometric gate management with face recognition, intelligent HOD approval workflow, and real-time guardian notifications.</div>
+          <div class="al-features">
+            <div class="al-feat"><div class="al-feat-ic">🤖</div>98.7% Face Recognition Accuracy</div>
+            <div class="al-feat"><div class="al-feat-ic">🔔</div>Instant Guardian Notifications</div>
+            <div class="al-feat"><div class="al-feat-ic">🎫</div>Digital HOD Approval Workflow</div>
+            <div class="al-feat"><div class="al-feat-ic">📊</div>Real-Time Exit Analytics</div>
+          </div>
+        </div>
+      </div>
+      <div class="al-bottom">Garrison University, Lahore &nbsp;·&nbsp; Department of Artificial Intelligence &nbsp;·&nbsp; BS AI Final Year Project 2025</div>
+    </div>
+
+    <!-- Right panel -->
+    <div class="auth-right">
+      <!-- Role selector -->
+      <div style="margin-bottom:28px;">
+        <div style="font-family:var(--fse);font-size:1.35rem;font-weight:700;color:#fff;margin-bottom:4px;">Welcome to SCEMS</div>
+        <div style="font-size:12.5px;color:rgba(184,204,228,.4);margin-bottom:20px;">Select your role to continue</div>
+        <div class="role-selector">
+          <div class="role-btn sel" id="role-student" onclick="selectRole('student')">
+            <div class="rb-ic">🎓</div>
+            <div class="rb-title">Student</div>
+            <div class="rb-sub">Register &amp; request exit pass</div>
+          </div>
+          <div class="role-btn" id="role-admin" onclick="selectRole('admin')">
+            <div class="rb-ic">🏛️</div>
+            <div class="rb-title">Admin / HOD</div>
+            <div class="rb-sub">Approve passes &amp; view analytics</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Auth tabs (only for student) -->
+      <div id="student-tabs" class="auth-tabs">
+        <button class="at-pill on" onclick="authTab('login',this)">Sign In</button>
+        <button class="at-pill" onclick="authTab('signup',this)">Sign Up</button>
+      </div>
+
+      <div id="err-msg" class="err-msg"></div>
+
+      <!-- Student Login -->
+      <div class="auth-form on" id="form-student-login">
+        <div class="form-title">Student Sign In</div>
+        <div class="form-sub">Enter your roll number and password to access your dashboard.</div>
+        <div class="fg"><label>Roll Number</label><input id="sl-roll" placeholder="GU-20XX-XX-XXX" autocomplete="off"></div>
+        <div class="fg"><label>Password</label><input type="password" id="sl-pass" placeholder="••••••••"></div>
+        <button class="btn-primary" onclick="studentLogin()">Sign In →</button>
+        <div class="switch-text">Don't have an account? <a onclick="authTab('signup', document.querySelectorAll('.at-pill')[1])">Sign up here</a></div>
+      </div>
+
+      <!-- Student Signup -->
+      <div class="auth-form" id="form-student-signup">
+        <div class="form-title">Create Student Account</div>
+        <div class="form-sub">Register with your university details. Use Auto-Fill for demo data.</div>
+        <button class="autofill-btn" onclick="autoFill()">✨ Auto-Fill Demo Details</button>
+        <div class="form-row">
+          <div class="fg"><label>Full Name</label><input id="su-name" placeholder="Your full name"></div>
+          <div class="fg"><label>Roll Number</label><input id="su-roll" placeholder="GU-20XX-XX-XXX"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Department</label>
+            <select id="su-dept">
+              <option value="">Select dept.</option>
+              <option>Artificial Intelligence</option><option>Computer Science</option>
+              <option>Software Engineering</option><option>Mathematics</option>
+              <option>Electrical Engineering</option><option>BBA</option>
+            </select>
+          </div>
+          <div class="fg"><label>Degree Program</label><input id="su-deg" placeholder="e.g. BSAI / BSCS"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Semester</label>
+            <select id="su-sem">
+              <option value="">Select</option>
+              <option>1st</option><option>2nd</option><option>3rd</option><option>4th</option>
+              <option>5th</option><option>6th</option><option>7th</option><option>8th</option>
+            </select>
+          </div>
+          <div class="fg"><label>ID Card No.</label><input id="su-id" placeholder="XXXXXX"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Father's Name</label><input id="su-father" placeholder="Father's full name"></div>
+          <div class="fg"><label>Mobile No.</label><input id="su-mobile" placeholder="03XX-XXXXXXX"></div>
+        </div>
+        <div class="form-row">
+          <div class="fg"><label>Password</label><input type="password" id="su-pass" placeholder="Create password"></div>
+          <div class="fg"><label>Confirm Password</label><input type="password" id="su-pass2" placeholder="Repeat password"></div>
+        </div>
+        <button class="btn-primary" onclick="studentSignup()">Create Account →</button>
+        <div class="switch-text">Already have an account? <a onclick="authTab('login', document.querySelectorAll('.at-pill')[0])">Sign in</a></div>
+      </div>
+
+      <!-- Admin Login -->
+      <div class="auth-form" id="form-admin-login">
+        <div class="form-title">Admin Sign In</div>
+        <div class="form-sub">Enter your admin credentials to access the management portal.</div>
+        <div class="fg"><label>Username</label><input id="al-user" placeholder="admin" value="admin"></div>
+        <div class="fg"><label>Password</label><input type="password" id="al-pass" placeholder="••••••••" value="admin123"></div>
+        <div style="font-size:11.5px;color:rgba(201,162,39,.5);background:rgba(201,162,39,.06);border:1px solid rgba(201,162,39,.15);border-radius:9px;padding:9px 13px;margin-bottom:14px;">
+          Demo credentials: &nbsp;<strong style="color:var(--gold3);">admin</strong> / <strong style="color:var(--gold3);">admin123</strong>
+        </div>
+        <button class="btn-primary" onclick="adminLogin()">Sign In →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════ APP SCREEN ══════════════════════ -->
+<div class="screen" id="s-app">
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">
+      <div class="sb-logo">
+        <div class="al-shield" style="width:38px;height:44px;">
+          <svg viewBox="0 0 46 52" fill="none"><path d="M23 2L42 10V26C42 36.5 33.5 46 23 50C12.5 46 4 36.5 4 26V10L23 2Z" fill="url(#sg3)" stroke="url(#ss3)" stroke-width="1.2"/><text x="23" y="33" text-anchor="middle" font-family="serif" font-size="13" font-weight="900" fill="url(#st3)">GU</text><defs><linearGradient id="sg3" x1="4" y1="2" x2="42" y2="50" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#d4a017"/><stop offset="100%" stop-color="#9a7400"/></linearGradient><linearGradient id="ss3" x1="4" y1="2" x2="42" y2="50" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#e0b030"/><stop offset="100%" stop-color="#c9920a"/></linearGradient><linearGradient id="st3" x1="15" y1="22" x2="31" y2="34" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#fdf0c0"/><stop offset="100%" stop-color="#e0b030"/></linearGradient></defs></svg>
+        </div>
+        <div><div class="sb-uni">Garrison University</div><div class="sb-sys">SCEMS v2.0</div></div>
+      </div>
+      <div class="sb-tag">Smart Campus Exit Monitoring</div>
+    </div>
+    <div class="sb-user" id="sb-user">
+      <div class="sbu-av" id="sb-av">?</div>
+      <div><div class="sbu-nm" id="sb-nm">—</div><div class="sbu-role" id="sb-role">—</div></div>
+    </div>
+
+    <!-- Admin nav -->
+    <div id="nav-admin" style="display:none;">
+      <div class="sb-sec">Main</div>
+      <div class="nav-item on" onclick="goPage('admin-home')" data-p="admin-home"><div class="nav-ic">🏛️</div><span>Dashboard</span></div>
+      <div class="sb-sec">Modules</div>
+      <div class="nav-item" onclick="goPage('admin-hod')" data-p="admin-hod"><div class="nav-ic">🏫</div><span>HOD Approval Portal</span><span class="nav-badge red" id="nb-pend">0</span></div>
+      <div class="nav-item" onclick="goPage('admin-students')" data-p="admin-students"><div class="nav-ic">👥</div><span>All Students</span></div>
+      <div class="nav-item" onclick="goPage('admin-scanner')" data-p="admin-scanner"><div class="nav-ic">🔍</div><span>Gate Scanner</span></div>
+      <div class="nav-item" onclick="goPage('admin-analytics')" data-p="admin-analytics"><div class="nav-ic">📊</div><span>Analytics</span></div>
+    </div>
+
+    <!-- Student nav -->
+    <div id="nav-student" style="display:none;">
+      <div class="sb-sec">My Portal</div>
+      <div class="nav-item on" onclick="goPage('stu-home')" data-p="stu-home"><div class="nav-ic">🏠</div><span>My Dashboard</span></div>
+      <div class="nav-item" onclick="goPage('stu-register')" data-p="stu-register"><div class="nav-ic">📱</div><span>Biometric Registration</span></div>
+      <div class="nav-item" onclick="goPage('stu-gatepass')" data-p="stu-gatepass"><div class="nav-ic">🎫</div><span>Gate Pass</span></div>
+      <div class="nav-item" onclick="goPage('stu-profile')" data-p="stu-profile"><div class="nav-ic">👤</div><span>My Profile</span></div>
+      <div class="nav-item" onclick="goPage('stu-history')" data-p="stu-history"><div class="nav-ic">📋</div><span>Exit History</span></div>
+    </div>
+
+    <div class="sb-foot">
+      <div class="sys-dot"><div class="dot-g"></div><span>AI System Online · Gate 1</span></div>
+      <button class="logout-btn" onclick="logout()">🚪 Sign Out</button>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main">
+    <div class="topbar">
+      <button class="hbtn" onclick="document.getElementById('sidebar').classList.toggle('open')">☰</button>
+      <div class="tb-bc">
+        <span>Garrison University</span><span style="opacity:.3;margin:0 4px;">›</span>
+        <span>SCEMS</span><span style="opacity:.3;margin:0 4px;">›</span>
+        <span class="tb-cur" id="tb-page">Dashboard</span>
+      </div>
+      <div class="tb-r">
+        <div class="tb-clk" id="live-clk">--:--:--</div>
+        <div style="width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--g2);border:1px solid var(--bw);font-size:16px;cursor:pointer;position:relative;" onclick="goPage('stu-history')">🔔<div style="position:absolute;top:6px;right:6px;width:7px;height:7px;border-radius:50%;background:var(--ds);border:2px solid var(--navy2);"></div></div>
+      </div>
+    </div>
+
+    <!-- ████ ADMIN PAGES ████ -->
+    <!-- Admin Home -->
+    <div class="page on" id="page-admin-home">
+      <div class="pi">
+        <div class="phd">
+          <div class="phd-l"><div class="phd-ic">🏛️</div><div><div class="phd-h" id="admin-welcome">Admin Dashboard</div><div class="phd-s">Garrison University — Smart Campus Exit Monitoring System</div></div></div>
+        </div>
+        <div class="stat-grid">
+          <div class="sc"><div class="sc-ic">👨‍🎓</div><div class="sc-lbl">Registered Students</div><div class="sc-val" id="ah-stu">0</div><div class="sc-trend u">Active profiles</div></div>
+          <div class="sc"><div class="sc-ic">🎫</div><div class="sc-lbl">Total Requests</div><div class="sc-val" id="ah-tot">0</div><div class="sc-trend f">All time</div></div>
+          <div class="sc s"><div class="sc-ic">✅</div><div class="sc-lbl">Approved</div><div class="sc-val" id="ah-app">0</div><div class="sc-trend u">Exit allowed</div></div>
+          <div class="sc d"><div class="sc-ic">❌</div><div class="sc-lbl">Rejected</div><div class="sc-val" id="ah-rej">0</div><div class="sc-trend d">Denied</div></div>
+          <div class="sc w"><div class="sc-ic">⏳</div><div class="sc-lbl">Pending Review</div><div class="sc-val" id="ah-pend">0</div><div class="sc-trend f">Awaiting HOD</div></div>
+          <div class="sc"><div class="sc-ic">🎯</div><div class="sc-lbl">AI Accuracy</div><div class="sc-val">98.7%</div><div class="sc-trend u">Face recognition</div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;" class="ah-grid">
+          <div class="card">
+            <div class="sec-lbl">Pending Approvals</div>
+            <div class="card-title">Recent Gate Pass Requests</div>
+            <div class="card-sub">Requests requiring your attention</div>
+            <div class="req-feed" id="ah-pend-feed" style="max-height:320px;overflow-y:auto;"></div>
+          </div>
+          <div class="card">
+            <div class="sec-lbl">Exit Activity</div>
+            <div class="card-title">Today's Exits by Department</div>
+            <div class="card-sub">Current day breakdown</div>
+            <div style="margin-top:4px;">
+              <div class="bc-row"><span class="bc-lbl">AI Dept.</span><div class="bc-tr"><div class="bc-fi" style="width:82%"></div></div><span class="bc-vl">14</span></div>
+              <div class="bc-row"><span class="bc-lbl">CS Dept.</span><div class="bc-tr"><div class="bc-fi" style="width:62%"></div></div><span class="bc-vl">11</span></div>
+              <div class="bc-row"><span class="bc-lbl">SE Dept.</span><div class="bc-tr"><div class="bc-fi" style="width:45%"></div></div><span class="bc-vl">8</span></div>
+              <div class="bc-row"><span class="bc-lbl">EE Dept.</span><div class="bc-tr"><div class="bc-fi" style="width:33%"></div></div><span class="bc-vl">6</span></div>
+              <div class="bc-row"><span class="bc-lbl">BBA</span><div class="bc-tr"><div class="bc-fi" style="width:17%"></div></div><span class="bc-vl">3</span></div>
+            </div>
+          </div>
+        </div>
+        <style>@media(max-width:700px){.ah-grid{grid-template-columns:1fr!important;}}</style>
+      </div>
+    </div>
+
+    <!-- Admin HOD Portal -->
+    <div class="page" id="page-admin-hod">
+      <div class="pi">
+        <div class="phd">
+          <div class="phd-l"><div class="phd-ic">🏫</div><div><div class="phd-h">HOD Approval Portal</div><div class="phd-s" id="hod-subtext">Approve or reject student gate pass requests</div></div></div>
+        </div>
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="sc w"><div class="sc-ic">⏳</div><div class="sc-lbl">Pending</div><div class="sc-val" id="hod-cp">0</div><div class="sc-trend f">Needs action</div></div>
+          <div class="sc s"><div class="sc-ic">✅</div><div class="sc-lbl">Approved</div><div class="sc-val" id="hod-ca">0</div><div class="sc-trend u">Cleared</div></div>
+          <div class="sc d"><div class="sc-ic">❌</div><div class="sc-lbl">Rejected</div><div class="sc-val" id="hod-cr">0</div><div class="sc-trend d">Denied</div></div>
+        </div>
+        <div class="tabs" id="hod-tabs">
+          <button class="tab on" onclick="filterHOD('pending',this)">⏳ Pending</button>
+          <button class="tab" onclick="filterHOD('approved',this)">✓ Approved</button>
+          <button class="tab" onclick="filterHOD('rejected',this)">✕ Rejected</button>
+          <button class="tab" onclick="filterHOD('all',this)">All</button>
+        </div>
+        <div class="req-feed" id="hod-feed"></div>
+      </div>
+    </div>
+
+    <!-- Admin Students List -->
+    <div class="page" id="page-admin-students">
+      <div class="pi">
+        <div class="phd"><div class="phd-l"><div class="phd-ic">👥</div><div><div class="phd-h">All Registered Students</div><div class="phd-s">Biometric profiles in the system</div></div></div></div>
+        <div id="students-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;"></div>
+      </div>
+    </div>
+
+    <!-- Admin Scanner -->
+    <div class="page" id="page-admin-scanner">
+      <div class="pi wide">
+        <div class="scan-layout">
+          <div class="scan-main">
+            <div class="scan-hd">
+              <div class="scan-ey"><span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gsl);box-shadow:var(--glows);animation:blink 2s infinite;"></span>Gate 1 — Main Entrance — Live</div>
+              <div class="scan-h2">Biometric Gate Scanner</div>
+              <div class="scan-sub">Garrison University — Face Recognition System</div>
+            </div>
+            <div class="scan-vp" id="scan-vp">
+              <div class="vp-scan"></div>
+              <div class="vpc tl"></div><div class="vpc tr"></div><div class="vpc bl"></div><div class="vpc br"></div>
+              <div class="vp-idle" id="vp-idle"><div class="vp-idle-ic">👤</div><div class="vp-idle-txt">Press Start Scan to activate camera</div></div>
+              <!-- Real webcam video -->
+              <video id="gate-video" autoplay playsinline muted style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"></video>
+              <canvas id="vp-cv" width="560" height="350" style="display:none;width:100%;height:100%;object-fit:cover;position:absolute;inset:0;"></canvas>
+              <div class="vp-el" id="vp-el"></div>
+              <div class="vp-strip" id="vp-strip">
+                <div class="vs-nm" id="vs-nm">—</div><div class="vs-roll" id="vs-roll">—</div>
+                <div class="vs-tags"><div class="vs-tag" id="vs-dept">—</div><div class="vs-tag" id="vs-sem">—</div><div class="vs-tag" id="vs-badge">—</div></div>
+              </div>
+            </div>
+            <div class="scan-ctrl">
+              <button class="btn btn-g" style="font-size:14px;padding:13px 26px;" id="btn-scan" onclick="runScan()">▶ Start Biometric Scan</button>
+              <button class="btn btn-gh" onclick="resetScan()">↺ Reset</button>
+              <button class="btn btn-gh" onclick="stopGateCamera()" id="btn-cam-stop" style="display:none;">📷 Stop Camera</button>
+            </div>
+          </div>
+          <div class="scan-sb">
+            <div class="ss-sec">
+              <div class="ss-ttl">AI Pipeline</div>
+              <div class="ai-step" id="ai-s1"><div class="ai-b">👁️</div><div style="flex:1;"><div class="ai-nm">Face Detection</div><div class="ai-sb">YOLOv8-Face</div></div><div class="ai-st idle" id="ai-t1">Idle</div></div>
+              <div class="ai-step" id="ai-s2"><div class="ai-b">💡</div><div style="flex:1;"><div class="ai-nm">Liveness Check</div><div class="ai-sb">Anti-spoofing</div></div><div class="ai-st idle" id="ai-t2">Waiting</div></div>
+              <div class="ai-step" id="ai-s3"><div class="ai-b">🔎</div><div style="flex:1;"><div class="ai-nm">DB Search</div><div class="ai-sb" id="db-count">0 records</div></div><div class="ai-st idle" id="ai-t3">Waiting</div></div>
+              <div class="ai-step" id="ai-s4"><div class="ai-b">🪪</div><div style="flex:1;"><div class="ai-nm">Identity Match</div><div class="ai-sb">FaceNet-512d</div></div><div class="ai-st idle" id="ai-t4">Waiting</div></div>
+              <div class="ai-step" id="ai-s5"><div class="ai-b">🎫</div><div style="flex:1;"><div class="ai-nm">Pass Check</div><div class="ai-sb">HOD approval</div></div><div class="ai-st idle" id="ai-t5">Waiting</div></div>
+            </div>
+            <div class="ss-sec">
+              <div class="ss-ttl">Confidence</div>
+              <div class="flex ic g2"><div class="conf-n" id="conf-n">—</div><div class="conf-u">%</div></div>
+              <div class="conf-tr"><div class="conf-fi" id="conf-fi" style="width:0%"></div></div>
+              <div class="conf-d" id="conf-d">Awaiting scan</div>
+            </div>
+            <div class="ss-sec">
+              <div class="ss-ttl">Identity</div>
+              <div class="pt-row"><span class="pt-k">Name</span><span class="pt-v" id="pt-nm">—</span></div>
+              <div class="pt-row"><span class="pt-k">Roll No.</span><span class="pt-v mono" id="pt-roll">—</span></div>
+              <div class="pt-row"><span class="pt-k">Department</span><span class="pt-v" id="pt-dept">—</span></div>
+              <div class="pt-row"><span class="pt-k">Pass Status</span><span class="pt-v" id="pt-status">—</span></div>
+              <div class="pt-row"><span class="pt-k">Reason</span><span class="pt-v" id="pt-rsn">—</span></div>
+              <div class="pt-row"><span class="pt-k">Approved By</span><span class="pt-v" id="pt-hod">—</span></div>
+              <div class="pt-row"><span class="pt-k">Scan Time</span><span class="pt-v mono" id="pt-time">—</span></div>
+            </div>
+            <div class="ss-sec" style="flex:1;display:flex;flex-direction:column;justify-content:flex-end;">
+              <div class="vbox idle" id="vbox">
+                <div class="gv-lbl">Gate Decision</div>
+                <div class="gv-txt" id="gv-txt">AWAITING</div>
+                <div class="gv-sub" id="gv-sub">Start scan to proceed</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Analytics -->
+    <div class="page" id="page-admin-analytics">
+      <div class="pi">
+        <div class="phd"><div class="phd-l"><div class="phd-ic">📊</div><div><div class="phd-h">Analytics Dashboard</div><div class="phd-s">Real-time exit monitoring statistics</div></div></div></div>
+        <div class="stat-grid">
+          <div class="sc"><div class="sc-ic">👨‍🎓</div><div class="sc-lbl">Students</div><div class="sc-val" id="an-stu">0</div><div class="sc-trend u">Registered</div></div>
+          <div class="sc"><div class="sc-ic">🎫</div><div class="sc-lbl">Total Requests</div><div class="sc-val" id="an-tot">0</div><div class="sc-trend f">All time</div></div>
+          <div class="sc s"><div class="sc-ic">✅</div><div class="sc-lbl">Approved</div><div class="sc-val" id="an-app">0</div><div class="sc-trend u">Exits allowed</div></div>
+          <div class="sc d"><div class="sc-ic">❌</div><div class="sc-lbl">Rejected</div><div class="sc-val" id="an-rej">0</div><div class="sc-trend d">Denied</div></div>
+          <div class="sc w"><div class="sc-ic">⏳</div><div class="sc-lbl">Pending</div><div class="sc-val" id="an-pnd">0</div><div class="sc-trend f">Awaiting</div></div>
+          <div class="sc"><div class="sc-ic">🎯</div><div class="sc-lbl">AI Accuracy</div><div class="sc-val">98.7%</div><div class="sc-trend u">Recognition</div></div>
+        </div>
+        <div class="chart-grid">
+          <div class="chart-card">
+            <div class="cc-ttl">Requests by Department</div><div class="cc-sub">Current semester</div>
+            <div class="bc-row"><span class="bc-lbl">AI Dept.</span><div class="bc-tr"><div class="bc-fi" style="width:82%"></div></div><span class="bc-vl">82</span></div>
+            <div class="bc-row"><span class="bc-lbl">CS Dept.</span><div class="bc-tr"><div class="bc-fi" style="width:68%"></div></div><span class="bc-vl">68</span></div>
+            <div class="bc-row"><span class="bc-lbl">SE Dept.</span><div class="bc-tr"><div class="bc-fi" style="width:55%"></div></div><span class="bc-vl">55</span></div>
+            <div class="bc-row"><span class="bc-lbl">EE Dept.</span><div class="bc-tr"><div class="bc-fi" style="width:47%"></div></div><span class="bc-vl">47</span></div>
+            <div class="bc-row"><span class="bc-lbl">Math</span><div class="bc-tr"><div class="bc-fi" style="width:22%"></div></div><span class="bc-vl">22</span></div>
+          </div>
+          <div class="chart-card">
+            <div class="cc-ttl">Weekly Exit Trend</div><div class="cc-sub">Approved exits per day</div>
+            <div class="trend-chart">
+              <div class="tc-col"><div class="tc-bw"><div class="tc-bar" style="height:55%;"></div></div><div class="tc-lb">Mon</div></div>
+              <div class="tc-col"><div class="tc-bw"><div class="tc-bar" style="height:72%;"></div></div><div class="tc-lb">Tue</div></div>
+              <div class="tc-col"><div class="tc-bw"><div class="tc-bar" style="height:48%;"></div></div><div class="tc-lb">Wed</div></div>
+              <div class="tc-col"><div class="tc-bw"><div class="tc-bar" style="height:88%;"></div></div><div class="tc-lb">Thu</div></div>
+              <div class="tc-col"><div class="tc-bw"><div class="tc-bar today" style="height:100%;"></div></div><div class="tc-lb today">Today</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="chart-card">
+          <div class="cc-ttl">Recent Activity Log</div><div class="cc-sub">Latest gate events</div>
+          <div style="overflow-x:auto;margin-top:14px;">
+            <table class="act-table"><thead><tr><th>Student</th><th>Roll No.</th><th>Dept.</th><th>Date</th><th>Time</th><th>Reason</th><th>Status</th></tr></thead><tbody id="act-tb"></tbody></table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ████ STUDENT PAGES ████ -->
+    <!-- Student Home -->
+    <div class="page" id="page-stu-home">
+      <div class="pi">
+        <div class="phd">
+          <div class="phd-l"><div class="phd-ic">🏠</div><div><div class="phd-h" id="stu-welcome">My Dashboard</div><div class="phd-s">Your campus exit management portal</div></div></div>
+        </div>
+        <!-- Gate pass status card -->
+        <div id="stu-status-card"></div>
+        <!-- Quick stats -->
+        <div class="stat-grid" style="grid-template-columns:repeat(3,1fr);">
+          <div class="sc"><div class="sc-ic">🎫</div><div class="sc-lbl">My Requests</div><div class="sc-val" id="stu-tot-req">0</div><div class="sc-trend f">Total submitted</div></div>
+          <div class="sc s"><div class="sc-ic">✅</div><div class="sc-lbl">Approved</div><div class="sc-val" id="stu-app-req">0</div><div class="sc-trend u">Exit passes issued</div></div>
+          <div class="sc d"><div class="sc-ic">❌</div><div class="sc-lbl">Rejected</div><div class="sc-val" id="stu-rej-req">0</div><div class="sc-trend d">Denied</div></div>
+        </div>
+        <!-- Recent activity for this student -->
+        <div class="card">
+          <div class="sec-lbl">Recent Activity</div>
+          <div class="card-title">My Recent Gate Pass Requests</div>
+          <div class="req-feed mt3" id="stu-recent-feed"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Register (biometric) -->
+    <div class="page" id="page-stu-register">
+      <div class="pi">
+        <div class="phd"><div class="phd-l"><div class="phd-ic">📱</div><div><div class="phd-h">Biometric Registration</div><div class="phd-s">Complete your face enrollment for gate access</div></div></div></div>
+        <div class="stepper">
+          <div class="sn act" id="sn1"><div class="sc2">1</div><div><div style="font-size:9.5px;color:rgba(184,204,228,.28);letter-spacing:.1em;text-transform:uppercase;">Step 01</div><div class="s-lbl">ID Card Scan</div></div></div>
+          <div class="sline" id="sl1"></div>
+          <div class="sn" id="sn2"><div class="sc2">2</div><div><div style="font-size:9.5px;color:rgba(184,204,228,.28);letter-spacing:.1em;text-transform:uppercase;">Step 02</div><div class="s-lbl">Face Enrollment</div></div></div>
+          <div class="sline" id="sl2"></div>
+          <div class="sn" id="sn3"><div class="sc2">3</div><div><div style="font-size:9.5px;color:rgba(184,204,228,.28);letter-spacing:.1em;text-transform:uppercase;">Step 03</div><div class="s-lbl">Profile Ready</div></div></div>
+        </div>
+        <!-- Step 1 -->
+        <div id="rs1">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;" class="rs1g">
+            <div class="card">
+              <div class="card-title">📷 Capture University ID Card</div>
+              <div class="card-sub">Auto-captures your registered details</div>
+              <div class="czone czc" id="cz-id" onclick="captureID()" style="aspect-ratio:4/3;">
+                <div class="cbr"></div><div class="cbl"></div>
+                <div class="sweep" id="id-sweep"></div>
+                <div class="cz-ov" id="cz-id-ov"><div class="cz-ic">🪪</div><div class="cz-txt">Tap to capture ID card</div><div class="cz-hint">Hold flat, 15-20cm from camera</div></div>
+                <div class="cz-res" id="cz-id-res"><canvas id="id-cv" width="520" height="390"></canvas></div>
+              </div>
+              <div class="flex g2 mt3">
+                <button class="btn btn-gh btn-sm" onclick="recaptureID()">↺ Recapture</button>
+                <button class="btn btn-g" id="btn-id-nx" style="display:none;" onclick="rsGo(2)">Face Enrollment →</button>
+              </div>
+            </div>
+            <div>
+              <div class="ocr-panel" id="ocr-panel">
+                <div class="ocr-hd"><div class="ocr-led"></div><div class="ocr-ttl">OCR Extraction Complete</div><span class="badge b-a" style="margin-left:auto;">✓ Verified</span></div>
+                <div class="ocr-grid">
+                  <div class="of"><div class="ok">Full Name</div><div class="ov" id="o-name">—</div></div>
+                  <div class="of"><div class="ok">Roll Number</div><div class="ov mono" id="o-roll">—</div></div>
+                  <div class="of"><div class="ok">Department</div><div class="ov" id="o-dept">—</div></div>
+                  <div class="of"><div class="ok">Degree</div><div class="ov" id="o-deg">—</div></div>
+                  <div class="of"><div class="ok">Semester</div><div class="ov" id="o-sem">—</div></div>
+                  <div class="of"><div class="ok">Card Status</div><div class="ov"><span class="badge b-a">Valid</span></div></div>
+                </div>
+              </div>
+              <div class="card mt3">
+                <div class="sec-lbl">Instructions</div>
+                <div style="display:flex;flex-direction:column;gap:8px;">
+                  <div class="flex g3 ic" style="font-size:12.5px;color:rgba(184,204,228,.55);"><div style="width:24px;height:24px;border-radius:7px;background:rgba(201,162,39,.1);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">1</div>Hold card flat in good light</div>
+                  <div class="flex g3 ic" style="font-size:12.5px;color:rgba(184,204,228,.55);"><div style="width:24px;height:24px;border-radius:7px;background:rgba(201,162,39,.1);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">2</div>All 4 corners must be in frame</div>
+                  <div class="flex g3 ic" style="font-size:12.5px;color:rgba(184,204,228,.55);"><div style="width:24px;height:24px;border-radius:7px;background:rgba(201,162,39,.1);display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;">3</div>Verify extracted info before next step</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <style>@media(max-width:650px){.rs1g{grid-template-columns:1fr!important;}}</style>
+        </div>
+        <!-- Step 2 -->
+        <div id="rs2" style="display:none;">
+          <div class="card" style="max-width:580px;margin:0 auto;">
+            <div class="card-title">🤖 Biometric Face Enrollment</div>
+            <div class="card-sub">Capture 3 angles to generate your 512-D face embedding for gate recognition.</div>
+            <!-- Webcam live preview for enrollment -->
+            <div style="position:relative;width:100%;max-width:360px;margin:0 auto 16px;border-radius:14px;overflow:hidden;background:#000;aspect-ratio:4/3;">
+              <video id="enroll-video" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;"></video>
+              <div id="enroll-cam-msg" style="display:none;position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(4,12,26,.85);flex-direction:column;gap:10px;">
+                <div style="font-size:28px;">📷</div>
+                <div style="font-size:13px;color:rgba(184,204,228,.6);">Camera not started</div>
+                <button class="btn btn-g btn-sm" onclick="startEnrollCamera()">Start Camera</button>
+              </div>
+              <div style="position:absolute;top:10px;right:10px;">
+                <button class="btn btn-gh btn-sm" onclick="startEnrollCamera()" id="btn-enroll-cam" style="font-size:11px;padding:5px 10px;">📷 Camera</button>
+              </div>
+            </div>
+            <div style="font-size:12px;color:rgba(184,204,228,.4);text-align:center;margin-bottom:12px;" id="enroll-guide">Press Camera then capture each angle</div>
+            <div class="face-slots">
+              <div class="fs" id="fs-front" onclick="capFace('front')"><div class="fs-cv"><canvas id="fc-front" width="200" height="267"></canvas></div><div class="fs-ck">✓</div><div class="fs-ovl"><span style="font-size:10px;color:var(--gsl);font-weight:600;">✓ Captured</span></div><div class="fs-ic">😐</div><div class="fs-lb">Front View</div></div>
+              <div class="fs" id="fs-left" onclick="capFace('left')"><div class="fs-cv"><canvas id="fc-left" width="200" height="267"></canvas></div><div class="fs-ck">✓</div><div class="fs-ovl"><span style="font-size:10px;color:var(--gsl);font-weight:600;">✓ Captured</span></div><div class="fs-ic">👈</div><div class="fs-lb">Left Profile</div></div>
+              <div class="fs" id="fs-right" onclick="capFace('right')"><div class="fs-cv"><canvas id="fc-right" width="200" height="267"></canvas></div><div class="fs-ck">✓</div><div class="fs-ovl"><span style="font-size:10px;color:var(--gsl);font-weight:600;">✓ Captured</span></div><div class="fs-ic">👉</div><div class="fs-lb">Right Profile</div></div>
+            </div>
+            <div class="sec-lbl">Progress</div>
+            <div class="prog-bar mb2"><div class="prog-fill" id="fp-fill" style="width:0%"></div></div>
+            <div style="font-size:12px;color:rgba(184,204,228,.35);margin-bottom:16px;" id="fp-lbl">0 of 3 captured — tap each slot</div>
+            <div class="embed-panel" id="embed-panel">
+              <div class="sec-lbl">Embedding Results</div>
+              <div class="er"><span class="ek">Model</span><span class="ev">FaceNet-512d</span></div>
+              <div class="er"><span class="ek">Dimensions</span><span class="ev">512 vectors × 3 angles</span></div>
+              <div class="er"><span class="ek">Liveness Score</span><span class="ev">97.4% ✓</span></div>
+              <div class="er"><span class="ek">Quality</span><span class="ev">Excellent</span></div>
+              <div class="er"><span class="ek">Hash</span><span class="ev" id="embed-hash">Generating…</span></div>
+            </div>
+            <div class="flex g2 mt4">
+              <button class="btn btn-gh btn-sm" onclick="rsGo(1)">← Back</button>
+              <button class="btn btn-g" id="btn-face-nx" style="display:none;" onclick="finishBiometric()">Complete Enrollment ✓</button>
+            </div>
+          </div>
+        </div>
+        <!-- Step 3 -->
+        <div id="rs3" style="display:none;">
+          <div style="text-align:center;margin-bottom:28px;animation:fu .5s var(--ease);">
+            <div style="font-size:52px;margin-bottom:10px;">🎉</div>
+            <div style="font-family:var(--fse);font-size:1.7rem;color:#fff;font-weight:700;margin-bottom:5px;">Enrollment Complete!</div>
+            <div style="font-size:13px;color:rgba(184,204,228,.4);">Your face embeddings are saved. You can now request gate passes.</div>
+          </div>
+          <div class="prof-card" style="max-width:540px;margin:0 auto;" id="reg-prof-card">
+            <div class="pc-hd">
+              <div class="pc-ph"><canvas id="pc-photo-cv" width="80" height="80"></canvas></div>
+              <div style="flex:1;">
+                <div class="pc-nm" id="pc-nm">—</div>
+                <div class="pc-roll" id="pc-roll-d">—</div>
+                <div class="flex g2 wrap"><span class="badge b-a">✓ Biometric Enrolled</span><span class="badge b-i">Active</span></div>
+              </div>
+            </div>
+            <div class="pc-body">
+              <div class="pc-fields">
+                <div><div class="pf-k">Department</div><div class="pf-v" id="pc-dept">—</div></div>
+                <div><div class="pf-k">Degree</div><div class="pf-v" id="pc-deg">—</div></div>
+                <div><div class="pf-k">Semester</div><div class="pf-v" id="pc-sem">—</div></div>
+                <div><div class="pf-k">Father's Name</div><div class="pf-v" id="pc-father">—</div></div>
+                <div><div class="pf-k">Mobile</div><div class="pf-v" id="pc-mobile">—</div></div>
+                <div><div class="pf-k">ID Card No.</div><div class="pf-v" id="pc-idno">—</div></div>
+              </div>
+              <div class="ec-strip">
+                <div class="ec-chip">✓ Front Face</div>
+                <div class="ec-chip">✓ Left Profile</div>
+                <div class="ec-chip">✓ Right Profile</div>
+                <div class="ec-chip">✓ 512-D Embeddings</div>
+                <div class="ec-chip">✓ ID Card Scanned</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex g3 mt5" style="justify-content:center;flex-wrap:wrap;">
+            <button class="btn btn-gh" onclick="resetReg()">Re-enroll</button>
+            <button class="btn btn-g" onclick="goPage('stu-gatepass')">Request Gate Pass →</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Gate Pass -->
+    <div class="page" id="page-stu-gatepass">
+      <div class="pi">
+        <div class="phd"><div class="phd-l"><div class="phd-ic">🎫</div><div><div class="phd-h">Gate Pass Request</div><div class="phd-s">Submit an exit request for HOD approval</div></div></div></div>
+        <!-- Current pass status -->
+        <div id="stu-gp-status"></div>
+        <!-- Submit form (shown only if no pending request) -->
+        <div id="stu-gp-form">
+          <div class="card" style="max-width:600px;">
+            <div class="sec-lbl">New Request</div>
+            <div class="card-title">📝 Submit Gate Pass Request</div>
+            <div class="card-sub">Your request will be sent to the HOD for approval.</div>
+            <div class="fg2"><label>Leave Reason</label>
+              <select class="sel" id="gp-rsn">
+                <option value="">— Select reason —</option>
+                <option>Medical Appointment</option><option>Family Emergency</option>
+                <option>Bank / NADRA Visit</option><option>Court Appearance</option>
+                <option>Internship / Job Interview</option><option>Sports Event</option>
+                <option>Educational Field Trip</option><option>Personal Work</option>
+              </select>
+            </div>
+            <div class="frow">
+              <div class="fg2"><label>Exit Date</label><input class="inp" type="date" id="gp-date"></div>
+              <div class="fg2"><label>Departure Time</label><input class="inp" type="time" id="gp-time"></div>
+            </div>
+            <div class="frow">
+              <div class="fg2"><label>Expected Return</label><input class="inp" type="time" id="gp-ret"></div>
+              <div class="fg2"><label>Doc Reference (optional)</label><input class="inp" id="gp-doc" placeholder="Slip no. etc."></div>
+            </div>
+            <div class="fg2"><label>Additional Notes</label><textarea class="ta" id="gp-notes" placeholder="Any details that help HOD decide quickly..."></textarea></div>
+            <button class="btn btn-g btn-full" onclick="submitGP()">📤 Submit Request</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Student Profile -->
+    <div class="page" id="page-stu-profile">
+      <div class="pi">
+        <div class="phd"><div class="phd-l"><div class="phd-ic">👤</div><div><div class="phd-h">My Profile</div><div class="phd-s">Your biometric registration details</div></div></div></div>
+        <div id="stu-profile-content"></div>
+      </div>
+    </div>
+
+    <!-- Student History -->
+    <div class="page" id="page-stu-history">
+      <div class="pi">
+        <div class="phd"><div class="phd-l"><div class="phd-ic">📋</div><div><div class="phd-h">Exit History</div><div class="phd-s">All your gate pass requests and notifications</div></div></div></div>
+        <!-- Notification sent banner -->
+        <div id="stu-notif-area"></div>
+        <div class="req-feed" id="stu-hist-feed"></div>
+      </div>
+    </div>
+
+  </div><!-- end .main -->
+</div><!-- end #s-app -->
+
+<!-- HOD Modal -->
+<div class="modal-bd" id="hod-modal">
+  <div class="modal-box">
+    <div class="m-ttl" id="m-ttl">Confirm Decision</div>
+    <div class="m-desc" id="m-desc">Add remarks for this decision.</div>
+    <div class="fg2"><label>HOD Remarks</label><textarea class="ta" id="m-remarks" placeholder="Official remarks..."></textarea></div>
+    <div style="font-size:11px;color:rgba(184,204,228,.26);">Timestamp: <span id="m-ts" style="color:var(--gold3);"></span></div>
+    <div class="m-foot">
+      <button class="btn btn-gh btn-sm" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-sm" id="m-confirm" onclick="confirmHOD()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"><div class="t-ic" id="t-ic">✅</div><div class="t-msg" id="t-msg">Done</div></div>
+
+</div><!-- end #app -->
+<script>
+'use strict';
+
+/* ═══════════════════════════════════════════
+   API CONFIG
+═══════════════════════════════════════════ */
+const API = 'http://localhost:8000/api/v1';
+
+async function apiFetch(path, opts={}){
+  try {
+    const res = await fetch(API+path, {headers:{'Content-Type':'application/json',...(opts.headers||{})}, ...opts});
+    if(!res.ok){ const e=await res.json().catch(()=>({})); throw new Error(e.detail||res.statusText); }
+    return res.json();
+  } catch(e){ throw e; }
+}
+
+/* ═══════════════════════════════════════════
+   DATA STORE (local cache + localStorage fallback)
+═══════════════════════════════════════════ */
+let DB = { students:[], requests:[] };
+let SESSION = { role: null, user: null };
+
+async function syncDB(){
+  try {
+    const [stuRes, passRes] = await Promise.all([
+      apiFetch('/enrollment/students?limit=200'),
+      apiFetch('/gate-pass/pending/all'),
+    ]);
+    DB.students = (stuRes.students||[]).map(s=>({
+      id: s.id,
+      roll: s.roll_number,
+      name: s.full_name,
+      dept: s.department,
+      deg:  s.program,
+      sem:  s.semester+'th',
+      biometric: s.is_enrolled,
+      enrolledAt: s.created_at ? new Date(s.created_at).toLocaleDateString() : '—',
+      father: '',
+      mobile: '',
+      pass: '',
+      idno: ''
+    }));
+    // merge pending with any locally cached approved/rejected
+    const localAll = JSON.parse(localStorage.getItem('scems_requests')||'[]');
+    const pendingIds = new Set(passRes.map(p=>p.id));
+    DB.requests = [
+      ...passRes.map(p=>mapPass(p)),
+      ...localAll.filter(r=>!pendingIds.has(r.id) && r.status!=='pending')
+    ];
+    localStorage.setItem('scems_requests', JSON.stringify(DB.requests));
+  } catch(e){
+    // fallback to localStorage if backend unavailable
+    DB.students = JSON.parse(localStorage.getItem('scems_students')||'[]');
+    DB.requests = JSON.parse(localStorage.getItem('scems_requests')||'[]');
+  }
+}
+
+function mapPass(p){
+  return {
+    id: p.id,
+    roll: p.student_id,          // will be enriched below when possible
+    student: '—',
+    dept: '—',
+    sem: '—',
+    reason: p.reason||'—',
+    destination: p.destination||'—',
+    date: p.valid_from ? p.valid_from.split('T')[0] : '—',
+    time: p.valid_from ? p.valid_from.split('T')[1]?.slice(0,5) : '—',
+    ret:  p.valid_until ? p.valid_until.split('T')[1]?.slice(0,5) : '—',
+    notes: '',
+    status: p.status,
+    remarks: p.rejection_reason||'',
+    by: p.approved_by||'',
+    at: p.approved_at ? new Date(p.approved_at).toLocaleString() : '',
+    _apiId: p.id,
+    _studentId: p.student_id,
+  };
+}
+
+function loadDB(){ return DB; }
+function saveStudents(s){ DB.students=s; localStorage.setItem('scems_students', JSON.stringify(s)); }
+function saveRequests(r){ DB.requests=r; localStorage.setItem('scems_requests', JSON.stringify(r)); }
+
+/* ═══════════════════════════════════════════
+   CLOCK
+═══════════════════════════════════════════ */
+function tick(){
+  const n = new Date();
+  const el = document.getElementById('live-clk');
+  if(el) el.textContent = n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+}
+setInterval(tick, 1000); tick();
+
+/* ═══════════════════════════════════════════
+   TOAST
+═══════════════════════════════════════════ */
+function toast(msg, ic='✅'){
+  const t = document.getElementById('toast');
+  document.getElementById('t-ic').textContent = ic;
+  document.getElementById('t-msg').textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=> t.classList.remove('show'), 3200);
+}
+
+/* ═══════════════════════════════════════════
+   AUTH SCREEN LOGIC
+═══════════════════════════════════════════ */
+let currentRole = 'student';
+let currentAuthTab = 'login';
+
+function selectRole(role){
+  currentRole = role;
+  document.getElementById('role-student').classList.toggle('sel', role === 'student');
+  document.getElementById('role-admin').classList.toggle('sel', role === 'admin');
+  document.getElementById('student-tabs').style.display = role === 'student' ? 'flex' : 'none';
+  hideAllForms();
+  clearErr();
+  if(role === 'admin'){
+    document.getElementById('form-admin-login').classList.add('on');
+  } else {
+    document.getElementById('form-student-'+currentAuthTab).classList.add('on');
+  }
+}
+
+function authTab(tab, btn){
+  currentAuthTab = tab;
+  document.querySelectorAll('.at-pill').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  hideAllForms();
+  clearErr();
+  document.getElementById('form-student-'+tab).classList.add('on');
+}
+
+function hideAllForms(){
+  ['form-student-login','form-student-signup','form-admin-login'].forEach(id => {
+    document.getElementById(id).classList.remove('on');
+  });
+}
+
+function showErr(msg){
+  const el = document.getElementById('err-msg');
+  el.textContent = msg; el.classList.add('show');
+}
+function clearErr(){
+  document.getElementById('err-msg').classList.remove('show');
+}
+
+function autoFill(){
+  document.getElementById('su-name').value    = 'Saliha Usman';
+  document.getElementById('su-roll').value    = 'GU-2023-MATH-042';
+  document.getElementById('su-dept').value    = 'Mathematics';
+  document.getElementById('su-deg').value     = 'CMAI';
+  document.getElementById('su-sem').value     = '2nd';
+  document.getElementById('su-id').value      = 'XXXXXX';
+  document.getElementById('su-father').value  = 'M. Usman';
+  document.getElementById('su-mobile').value  = '03XX-XXXXXXX';
+  document.getElementById('su-pass').value    = 'student123';
+  document.getElementById('su-pass2').value   = 'student123';
+  toast('Demo details filled!', '✨');
+}
+
+async function studentSignup(){
+  clearErr();
+  const name   = document.getElementById('su-name').value.trim();
+  const roll   = document.getElementById('su-roll').value.trim();
+  const dept   = document.getElementById('su-dept').value;
+  const deg    = document.getElementById('su-deg').value.trim();
+  const sem    = document.getElementById('su-sem').value;
+  const idno   = document.getElementById('su-id').value.trim();
+  const father = document.getElementById('su-father').value.trim();
+  const mobile = document.getElementById('su-mobile').value.trim();
+  const pass   = document.getElementById('su-pass').value;
+  const pass2  = document.getElementById('su-pass2').value;
+
+  if(!name||!roll||!dept||!deg||!sem||!father||!mobile||!pass){ showErr('Please fill all required fields.'); return; }
+  if(pass !== pass2){ showErr('Passwords do not match.'); return; }
+  if(pass.length < 6){ showErr('Password must be at least 6 characters.'); return; }
+
+  if(DB.students.find(s => s.roll === roll)){ showErr('Roll number already registered. Please sign in.'); return; }
+
+  const newStudent = { roll, name, dept, deg, sem, idno, father, mobile, pass, biometric: false, enrolledAt: new Date().toLocaleDateString() };
+  DB.students.push(newStudent);
+  saveStudents(DB.students);
+
+  toast('Account created! Please sign in.', '🎉');
+  authTab('login', document.querySelectorAll('.at-pill')[0]);
+  document.getElementById('sl-roll').value = roll;
+}
+
+async function studentLogin(){
+  clearErr();
+  const roll = document.getElementById('sl-roll').value.trim();
+  const pass = document.getElementById('sl-pass').value;
+  if(!roll||!pass){ showErr('Enter your roll number and password.'); return; }
+
+  // Check localStorage first (local accounts)
+  const localStudents = JSON.parse(localStorage.getItem('scems_students')||'[]');
+  const localStudent = localStudents.find(s => s.roll === roll && s.pass === pass);
+  if(localStudent){
+    // Merge into DB
+    if(!DB.students.find(s=>s.roll===roll)) DB.students.push(localStudent);
+    SESSION = { role: 'student', user: localStudent };
+    enterApp();
+    return;
+  }
+  // Fallback: try backend sync
+  await syncDB();
+  const student = DB.students.find(s => s.roll === roll && s.pass === pass);
+  if(!student){ showErr('Invalid roll number or password.'); return; }
+  SESSION = { role: 'student', user: student };
+  enterApp();
+}
+
+function adminLogin(){
+  clearErr();
+  const user = document.getElementById('al-user').value.trim();
+  const pass = document.getElementById('al-pass').value;
+  if(user !== 'admin' || pass !== 'admin123'){ showErr('Invalid admin credentials.'); return; }
+  SESSION = { role: 'admin', user: { name: 'Prof. Dr. Khalid Mehmood', dept: 'Artificial Intelligence' } };
+  enterApp();
+}
+
+/* ═══════════════════════════════════════════
+   ENTER / LEAVE APP
+═══════════════════════════════════════════ */
+async function enterApp(){
+  document.getElementById('s-auth').classList.remove('on');
+  document.getElementById('s-app').classList.add('on');
+  await syncDB();
+
+  if(SESSION.role === 'admin'){
+    document.getElementById('nav-admin').style.display = 'block';
+    document.getElementById('nav-student').style.display = 'none';
+    document.getElementById('sb-av').textContent = 'KM';
+    document.getElementById('sb-nm').textContent = SESSION.user.name;
+    document.getElementById('sb-role').textContent = 'HOD · AI Department';
+    document.getElementById('admin-welcome').textContent = 'Welcome, Prof. Dr. Khalid';
+    goPage('admin-home');
+  } else {
+    document.getElementById('nav-student').style.display = 'block';
+    document.getElementById('nav-admin').style.display = 'none';
+    const u = SESSION.user;
+    document.getElementById('sb-av').textContent = u.name[0];
+    document.getElementById('sb-nm').textContent = u.name;
+    document.getElementById('sb-role').textContent = u.roll + ' · Student';
+    document.getElementById('stu-welcome').textContent = 'Welcome, ' + u.name.split(' ')[0] + '!';
+    goPage('stu-home');
+  }
+}
+
+function logout(){
+  SESSION = { role: null, user: null };
+  document.getElementById('s-app').classList.remove('on');
+  document.getElementById('s-auth').classList.add('on');
+  clearErr();
+  toast('Signed out successfully.', '👋');
+}
+
+/* ═══════════════════════════════════════════
+   PAGE NAVIGATION
+═══════════════════════════════════════════ */
+const PAGE_NAMES = {
+  'admin-home':'Dashboard','admin-hod':'HOD Approval Portal','admin-students':'All Students',
+  'admin-scanner':'Gate Scanner','admin-analytics':'Analytics',
+  'stu-home':'My Dashboard','stu-register':'Biometric Registration',
+  'stu-gatepass':'Gate Pass','stu-profile':'My Profile','stu-history':'Exit History'
+};
+
+function goPage(p){
+  document.querySelectorAll('.page').forEach(x => x.classList.remove('on'));
+  document.querySelectorAll('.nav-item').forEach(x => x.classList.remove('on'));
+  const el = document.getElementById('page-'+p);
+  if(el) el.classList.add('on');
+  const ni = document.querySelector('[data-p="'+p+'"]');
+  if(ni) ni.classList.add('on');
+  const tb = document.getElementById('tb-page');
+  if(tb) tb.textContent = PAGE_NAMES[p] || p;
+  document.getElementById('sidebar').classList.remove('open');
+  window.scrollTo(0, 0);
+
+  // Page-specific init
+  if(p === 'admin-home')      renderAdminHome();
+  if(p === 'admin-hod')       renderHOD();
+  if(p === 'admin-students')  renderStudents();
+  if(p === 'admin-analytics') renderAnalytics();
+  if(p === 'stu-home')        renderStuHome();
+  if(p === 'stu-gatepass')    renderStuGP();
+  if(p === 'stu-profile')     renderStuProfile();
+  if(p === 'stu-history')     renderStuHistory();
+}
+
+/* ═══════════════════════════════════════════
+   ADMIN: HOME
+═══════════════════════════════════════════ */
+async function renderAdminHome(){
+  await syncDB();
+  DB = loadDB();
+  const p = DB.requests.filter(r=>r.status==='pending').length;
+  const a = DB.requests.filter(r=>r.status==='approved').length;
+  const rj = DB.requests.filter(r=>r.status==='rejected').length;
+  document.getElementById('ah-stu').textContent = DB.students.length;
+  document.getElementById('ah-tot').textContent = DB.requests.length;
+  document.getElementById('ah-app').textContent = a;
+  document.getElementById('ah-rej').textContent = rj;
+  document.getElementById('ah-pend').textContent = p;
+  document.getElementById('nb-pend').textContent = p;
+
+  const feed = document.getElementById('ah-pend-feed');
+  const pending = DB.requests.filter(r=>r.status==='pending').slice(0,5);
+  if(!pending.length){
+    feed.innerHTML = '<div style="text-align:center;padding:30px;color:rgba(184,204,228,.3);font-size:13px;">No pending requests</div>';
+    return;
+  }
+  feed.innerHTML = pending.map(r => `
+    <div class="req-card" style="margin-bottom:0;">
+      <div class="req-av">${r.student[0]}</div>
+      <div class="req-body">
+        <div class="req-nm">${r.student}</div>
+        <div class="req-meta">${r.roll} · ${r.dept}</div>
+        <div class="req-row"><span class="badge b-p">PENDING</span><span style="font-size:11px;color:rgba(184,204,228,.3);">📅 ${r.date} ⏰ ${r.time}</span></div>
+        <div class="req-rsn">📋 ${r.reason}</div>
+      </div>
+      <div class="req-acts">
+        <button class="btn btn-s btn-sm" onclick="quickApprove(${r.id})">✓</button>
+        <button class="btn btn-d btn-sm" onclick="quickReject(${r.id})">✕</button>
+      </div>
+    </div>`).join('');
+}
+
+async function quickApprove(id){
+  try {
+    await apiFetch('/gate-pass/'+id+'/approve', {method:'POST', body:JSON.stringify({action:'approve',hod_name:'Prof. Dr. Khalid Mehmood',rejection_reason:null})});
+    const r = DB.requests.find(x=>x.id===id||x._apiId===id);
+    if(r){ r.status='approved'; r.by='Prof. Dr. Khalid Mehmood'; r.at=new Date().toLocaleString(); }
+    saveRequests(DB.requests);
+    await syncDB(); renderAdminHome();
+    toast('Gate pass approved!','✅');
+  } catch(e){ toast('Error: '+e.message,'❌'); }
+}
+async function quickReject(id){
+  try {
+    await apiFetch('/gate-pass/'+id+'/approve', {method:'POST', body:JSON.stringify({action:'reject',hod_name:'Prof. Dr. Khalid Mehmood',rejection_reason:'Rejected.'})});
+    const r = DB.requests.find(x=>x.id===id||x._apiId===id);
+    if(r){ r.status='rejected'; r.by='Prof. Dr. Khalid Mehmood'; r.at=new Date().toLocaleString(); }
+    saveRequests(DB.requests);
+    await syncDB(); renderAdminHome();
+    toast('Gate pass rejected.','❌');
+  } catch(e){ toast('Error: '+e.message,'❌'); }
+}
+
+/* ═══════════════════════════════════════════
+   ADMIN: HOD PORTAL
+═══════════════════════════════════════════ */
+let hodF='pending', mId=null, mAct=null;
+
+async function renderHOD(f){
+  if(f!==undefined) hodF=f;
+  await syncDB();
+  DB = loadDB();
+  const p=DB.requests.filter(r=>r.status==='pending').length;
+  const a=DB.requests.filter(r=>r.status==='approved').length;
+  const rj=DB.requests.filter(r=>r.status==='rejected').length;
+  document.getElementById('hod-cp').textContent=p;
+  document.getElementById('hod-ca').textContent=a;
+  document.getElementById('hod-cr').textContent=rj;
+  if(document.getElementById('nb-pend')) document.getElementById('nb-pend').textContent=p;
+
+  const list = hodF==='all' ? DB.requests : DB.requests.filter(r=>r.status===hodF);
+  const feed = document.getElementById('hod-feed');
+  if(!list.length){ feed.innerHTML='<div style="text-align:center;padding:46px;color:rgba(184,204,228,.28);">No requests here.</div>'; return; }
+
+  feed.innerHTML = list.map(r=>`
+    <div class="req-card">
+      <div class="req-av">${r.student[0]}</div>
+      <div class="req-body">
+        <div class="req-nm">${r.student}</div>
+        <div class="req-meta">${r.roll} · ${r.dept} · ${r.sem} Semester</div>
+        <div class="req-row">
+          <span class="badge b-${r.status==='approved'?'a':r.status==='rejected'?'r':'p'}">${r.status.toUpperCase()}</span>
+          <span style="font-size:11px;color:rgba(184,204,228,.3);">📅 ${r.date} ⏰ ${r.time} → ${r.ret||'—'}</span>
+        </div>
+        <div class="req-rsn">📋 ${r.reason}${r.notes?' — '+r.notes:''}</div>
+        ${r.remarks?`<div class="req-rmk">💬 ${r.remarks} — <strong style="color:var(--gold3)">${r.by}</strong></div>`:''}
+      </div>
+      <div class="req-acts">
+        ${r.status==='pending'
+          ?`<button class="btn btn-s btn-sm" onclick="openModal(${r.id},'approve')">✓ Approve</button>
+            <button class="btn btn-d btn-sm" onclick="openModal(${r.id},'reject')">✕ Reject</button>`
+          :`<span class="badge b-${r.status==='approved'?'a':'r'}">${r.status==='approved'?'✓ Approved':'✕ Rejected'}</span>`}
+      </div>
+    </div>`).join('');
+}
+
+function filterHOD(f,btn){
+  document.querySelectorAll('#hod-tabs .tab').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  renderHOD(f);
+}
+
+function openModal(id, action){
+  mId=id; mAct=action;
+  DB = loadDB();
+  const r = DB.requests.find(x=>x.id===id);
+  document.getElementById('m-ttl').textContent = action==='approve'?'✓ Approve Gate Pass':'✕ Reject Gate Pass';
+  document.getElementById('m-desc').textContent = r.student+' — '+r.reason+' — '+r.date;
+  document.getElementById('m-remarks').value = action==='approve'?'Approved. Please carry your university ID card.':'';
+  document.getElementById('m-ts').textContent = new Date().toLocaleString();
+  const cb = document.getElementById('m-confirm');
+  cb.className = action==='approve'?'btn btn-s btn-sm':'btn btn-d btn-sm';
+  cb.textContent = action==='approve'?'✓ Confirm Approval':'✕ Confirm Rejection';
+  document.getElementById('hod-modal').classList.add('open');
+}
+
+function closeModal(){ document.getElementById('hod-modal').classList.remove('open'); }
+
+async function confirmHOD(){
+  const remarks = document.getElementById('m-remarks').value||(mAct==='approve'?'Approved.':'Rejected.');
+  try {
+    await apiFetch('/gate-pass/'+mId+'/approve', {method:'POST', body:JSON.stringify({
+      action: mAct==='approve'?'approve':'reject',
+      hod_name: 'Prof. Dr. Khalid Mehmood',
+      rejection_reason: mAct==='reject' ? remarks : null
+    })});
+    const r = DB.requests.find(x=>x.id===mId||x._apiId===mId);
+    if(r){ r.status=mAct==='approve'?'approved':'rejected'; r.remarks=remarks; r.by='Prof. Dr. Khalid Mehmood'; r.at=new Date().toLocaleString(); }
+    saveRequests(DB.requests);
+    await syncDB();
+    closeModal(); renderHOD();
+    if(document.getElementById('nb-pend')) document.getElementById('nb-pend').textContent = DB.requests.filter(x=>x.status==='pending').length;
+    toast(mAct==='approve'?'Gate pass approved!':'Gate pass rejected.', mAct==='approve'?'✅':'❌');
+  } catch(e){ toast('Error: '+e.message,'❌'); closeModal(); }
+}
+
+/* ═══════════════════════════════════════════
+   ADMIN: STUDENTS LIST
+═══════════════════════════════════════════ */
+async function renderStudents(){
+  await syncDB();
+  DB = loadDB();
+  const grid = document.getElementById('students-grid');
+  if(!DB.students.length){
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:rgba(184,204,228,.28);">No students registered yet.</div>';
+    return;
+  }
+  grid.innerHTML = DB.students.map(s=>`
+    <div class="card" style="padding:20px;">
+      <div class="flex ic g3" style="margin-bottom:14px;">
+        <div style="width:46px;height:46px;border-radius:13px;background:linear-gradient(135deg,rgba(201,162,39,.14),rgba(19,40,80,.8));border:1px solid rgba(201,162,39,.18);display:flex;align-items:center;justify-content:center;font-family:var(--fse);font-size:20px;font-weight:700;color:var(--gold3);flex-shrink:0;">${s.name[0]}</div>
+        <div>
+          <div style="font-size:14px;color:#fff;font-weight:600;">${s.name}</div>
+          <div class="mono" style="font-size:11px;color:var(--gold3);">${s.roll}</div>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;margin-bottom:12px;">
+        <div><div style="color:rgba(184,204,228,.3);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;">Department</div><div style="color:rgba(184,204,228,.75);">${s.dept}</div></div>
+        <div><div style="color:rgba(184,204,228,.3);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;">Semester</div><div style="color:rgba(184,204,228,.75);">${s.sem}</div></div>
+        <div><div style="color:rgba(184,204,228,.3);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;">Degree</div><div style="color:rgba(184,204,228,.75);">${s.deg}</div></div>
+        <div><div style="color:rgba(184,204,228,.3);font-size:10px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px;">Mobile</div><div style="color:rgba(184,204,228,.75);">${s.mobile}</div></div>
+      </div>
+      <div class="flex g2 wrap">
+        <span class="badge b-${s.biometric?'a':'p'}">${s.biometric?'✓ Biometric Enrolled':'Pending Enrollment'}</span>
+        <span class="badge b-i">Enrolled ${s.enrolledAt}</span>
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════
+   ADMIN: ANALYTICS
+═══════════════════════════════════════════ */
+async function renderAnalytics(){
+  await syncDB();
+  DB = loadDB();
+  document.getElementById('an-stu').textContent  = DB.students.length;
+  document.getElementById('an-tot').textContent  = DB.requests.length;
+  document.getElementById('an-app').textContent  = DB.requests.filter(r=>r.status==='approved').length;
+  document.getElementById('an-rej').textContent  = DB.requests.filter(r=>r.status==='rejected').length;
+  document.getElementById('an-pnd').textContent  = DB.requests.filter(r=>r.status==='pending').length;
+  const tb = document.getElementById('act-tb');
+  tb.innerHTML = DB.requests.slice(0,10).map(r=>`
+    <tr>
+      <td>${r.student}</td>
+      <td style="font-family:var(--fmo);font-size:11px;color:var(--gold3);">${r.roll}</td>
+      <td>${r.dept}</td>
+      <td>${r.date}</td>
+      <td class="mono" style="font-size:12px;">${r.time}</td>
+      <td>${r.reason}</td>
+      <td><span class="badge b-${r.status==='approved'?'a':r.status==='rejected'?'r':'p'}">${r.status.toUpperCase()}</span></td>
+    </tr>`).join('');
+}
+
+/* ═══════════════════════════════════════════
+   STUDENT: HOME DASHBOARD
+═══════════════════════════════════════════ */
+async function renderStuHome(){
+  await syncDB();
+  DB = loadDB();
+  const u = SESSION.user;
+  const myReqs = DB.requests.filter(r=>r.roll===u.roll);
+  const myApp  = myReqs.filter(r=>r.status==='approved').length;
+  const myRej  = myReqs.filter(r=>r.status==='rejected').length;
+  document.getElementById('stu-tot-req').textContent = myReqs.length;
+  document.getElementById('stu-app-req').textContent = myApp;
+  document.getElementById('stu-rej-req').textContent = myRej;
+
+  // Gate status card — show latest active pass
+  const latestPending  = myReqs.find(r=>r.status==='pending');
+  const latestApproved = myReqs.find(r=>r.status==='approved');
+  const scEl = document.getElementById('stu-status-card');
+
+  if(latestApproved){
+    scEl.innerHTML = `
+      <div class="gate-status-card gsc-approved">
+        <div class="gsc-ic">✅</div>
+        <div class="gsc-title">Gate Pass Approved!</div>
+        <div class="gsc-sub">Your exit request has been approved by the HOD</div>
+        <div class="gsc-details">
+          <div><div class="gsd-k">Reason</div><div class="gsd-v">${latestApproved.reason}</div></div>
+          <div><div class="gsd-k">Date</div><div class="gsd-v">${latestApproved.date}</div></div>
+          <div><div class="gsd-k">Departure</div><div class="gsd-v">${latestApproved.time}</div></div>
+          <div><div class="gsd-k">Return</div><div class="gsd-v">${latestApproved.ret||'—'}</div></div>
+        </div>
+        <div style="font-size:12px;color:rgba(16,185,129,.7);padding:10px 14px;background:rgba(16,185,129,.05);border-radius:10px;border:1px solid rgba(16,185,129,.15);">
+          🔔 Guardian notification has been sent to <strong style="color:var(--gsl);">${u.father||'your guardian'}</strong> at <strong style="color:var(--gsl);">${u.mobile||'registered number'}</strong>
+        </div>
+      </div>`;
+  } else if(latestPending){
+    scEl.innerHTML = `
+      <div class="gate-status-card gsc-pending">
+        <div class="gsc-ic">⏳</div>
+        <div class="gsc-title">Gate Pass Pending</div>
+        <div class="gsc-sub">Your request is awaiting HOD approval</div>
+        <div class="gsc-details">
+          <div><div class="gsd-k">Reason</div><div class="gsd-v">${latestPending.reason}</div></div>
+          <div><div class="gsd-k">Date</div><div class="gsd-v">${latestPending.date}</div></div>
+          <div><div class="gsd-k">Departure</div><div class="gsd-v">${latestPending.time}</div></div>
+          <div><div class="gsd-k">Return</div><div class="gsd-v">${latestPending.ret||'—'}</div></div>
+        </div>
+        <div style="font-size:12px;color:rgba(245,158,11,.7);padding:10px 14px;background:rgba(245,158,11,.05);border-radius:10px;border:1px solid rgba(245,158,11,.15);">
+          🕐 Awaiting review from HOD. You'll be notified once a decision is made.
+        </div>
+      </div>`;
+  } else {
+    scEl.innerHTML = `
+      <div class="gate-status-card gsc-none">
+        <div class="gsc-ic">🎫</div>
+        <div class="gsc-title">No Active Gate Pass</div>
+        <div class="gsc-sub">You have not applied for a gate pass yet</div>
+        <button class="btn btn-g" onclick="goPage('stu-gatepass')" style="margin-top:4px;">Apply for Gate Pass →</button>
+      </div>`;
+  }
+
+  // Recent requests
+  const feed = document.getElementById('stu-recent-feed');
+  if(!myReqs.length){
+    feed.innerHTML = '<div style="text-align:center;padding:30px;color:rgba(184,204,228,.28);font-size:13px;">No requests yet. <a style="color:var(--gold3);cursor:pointer;" onclick="goPage(\'stu-gatepass\')">Apply for a gate pass</a></div>';
+    return;
+  }
+  feed.innerHTML = myReqs.slice(0,5).map(r=>`
+    <div class="req-card">
+      <div class="req-av">📋</div>
+      <div class="req-body">
+        <div class="req-nm">${r.reason}</div>
+        <div class="req-meta">📅 ${r.date} ⏰ ${r.time} → ${r.ret||'—'}</div>
+        <div class="req-row"><span class="badge b-${r.status==='approved'?'a':r.status==='rejected'?'r':'p'}">${r.status.toUpperCase()}</span></div>
+        ${r.remarks?`<div class="req-rmk">💬 ${r.remarks}</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════
+   STUDENT: GATE PASS
+═══════════════════════════════════════════ */
+async function renderStuGP(){
+  await syncDB();
+  DB = loadDB();
+  const u = SESSION.user;
+  const myReqs = DB.requests.filter(r=>r.roll===u.roll);
+  const latest = myReqs[0];
+  const statusEl = document.getElementById('stu-gp-status');
+  const formEl   = document.getElementById('stu-gp-form');
+
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('gp-date').value = today;
+
+  if(latest){
+    if(latest.status==='approved'){
+      statusEl.innerHTML = `
+        <div class="notif-banner" style="background:linear-gradient(135deg,rgba(16,185,129,.08),rgba(16,185,129,.03));border-color:rgba(16,185,129,.2);">
+          <div class="nb-ic">✅</div>
+          <div>
+            <div class="nb-title">Your Gate Pass is Approved</div>
+            <div class="nb-body">Reason: ${latest.reason} · Date: ${latest.date} · ${latest.time} → ${latest.ret||'—'}<br>
+            Approved by: <strong style="color:var(--gsl);">${latest.by}</strong><br>
+            <span style="color:rgba(16,185,129,.7);">🔔 Guardian notification sent to ${u.father||'guardian'} (${u.mobile||'—'})</span></div>
+          </div>
+        </div>`;
+      formEl.style.display = 'none';
+    } else if(latest.status==='pending'){
+      statusEl.innerHTML = `
+        <div class="notif-banner" style="background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.22);">
+          <div class="nb-ic">⏳</div>
+          <div>
+            <div class="nb-title">Gate Pass Pending Approval</div>
+            <div class="nb-body">Reason: ${latest.reason} · Date: ${latest.date} · ${latest.time}<br>
+            Your request is being reviewed by the HOD. You cannot submit another while this is pending.</div>
+          </div>
+        </div>`;
+      formEl.style.display = 'none';
+    } else {
+      // rejected — show message and allow reapply
+      statusEl.innerHTML = `
+        <div class="notif-banner" style="background:rgba(239,68,68,.07);border-color:rgba(239,68,68,.22);margin-bottom:16px;">
+          <div class="nb-ic">❌</div>
+          <div>
+            <div class="nb-title">Previous Request Rejected</div>
+            <div class="nb-body">Reason: ${latest.reason} · Remarks: <em>${latest.remarks}</em><br>You may submit a new request.</div>
+          </div>
+        </div>`;
+      formEl.style.display = 'block';
+    }
+  } else {
+    statusEl.innerHTML = '';
+    formEl.style.display = 'block';
+  }
+}
+
+async function submitGP(){
+  const u = SESSION.user;
+  const rsn  = document.getElementById('gp-rsn').value;
+  const date = document.getElementById('gp-date').value;
+  const time = document.getElementById('gp-time').value;
+  const ret  = document.getElementById('gp-ret').value;
+  const notes= document.getElementById('gp-notes').value;
+  if(!rsn||!date||!time){ toast('Please fill all required fields.','⚠️'); return; }
+
+  // Build ISO datetimes
+  const validFrom  = date+'T'+(time||'08:00')+':00';
+  const validUntil = date+'T'+(ret||'17:00')+':00';
+
+  // Find student UUID from DB
+  const stu = DB.students.find(s=>s.roll===u.roll);
+  if(!stu||!stu.id){ toast('Student not found in backend. Please re-enroll.','⚠️'); return; }
+
+  try {
+    const res = await apiFetch('/gate-pass/request', {method:'POST', body:JSON.stringify({
+      student_id: stu.id,
+      reason: rsn,
+      destination: notes||'Campus Exit',
+      valid_from: validFrom,
+      valid_until: validUntil,
+    })});
+    DB.requests.unshift({
+      id: res.id, _apiId: res.id, roll:u.roll, student:u.name, dept:u.dept, sem:u.sem,
+      reason:rsn, date, time, ret:ret||'—', notes,
+      status:'pending', remarks:'', by:'', at:''
+    });
+    saveRequests(DB.requests);
+    toast('Gate pass submitted for HOD review!','🎫');
+    renderStuGP();
+    renderStuHome();
+  } catch(e){ toast('Error: '+e.message,'❌'); }
+}
+
+/* ═══════════════════════════════════════════
+   STUDENT: PROFILE
+═══════════════════════════════════════════ */
+function renderStuProfile(){
+  const u = SESSION.user;
+  const cont = document.getElementById('stu-profile-content');
+
+  if(!u.biometric){
+    cont.innerHTML = `
+      <div class="notif-banner" style="background:rgba(245,158,11,.07);border-color:rgba(245,158,11,.2);margin-bottom:24px;">
+        <div class="nb-ic">⚠️</div>
+        <div>
+          <div class="nb-title">Biometric Enrollment Required</div>
+          <div class="nb-body">You haven't completed face enrollment yet. Complete it to use the gate scanner.</div>
+          <button class="btn btn-g btn-sm" style="margin-top:10px;" onclick="goPage('stu-register')">Start Biometric Enrollment →</button>
+        </div>
+      </div>`;
+  } else {
+    cont.innerHTML = '';
+  }
+
+  cont.innerHTML += `
+    <div class="prof-card">
+      <div class="pc-hd">
+        <div class="pc-ph" style="display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,rgba(201,162,39,.14),rgba(19,40,80,.8));">
+          <span style="font-size:32px;">${u.name[0]}</span>
+        </div>
+        <div style="flex:1;">
+          <div class="pc-nm">${u.name}</div>
+          <div class="pc-roll">${u.roll}</div>
+          <div class="flex g2 wrap">
+            <span class="badge b-${u.biometric?'a':'p'}">${u.biometric?'✓ Biometric Enrolled':'Pending Enrollment'}</span>
+            <span class="badge b-i">Active Student</span>
+          </div>
+        </div>
+      </div>
+      <div class="pc-body">
+        <div class="pc-fields">
+          <div><div class="pf-k">Department</div><div class="pf-v">${u.dept}</div></div>
+          <div><div class="pf-k">Degree</div><div class="pf-v">${u.deg}</div></div>
+          <div><div class="pf-k">Semester</div><div class="pf-v">${u.sem}</div></div>
+          <div><div class="pf-k">ID Card No.</div><div class="pf-v">${u.idno||'—'}</div></div>
+          <div><div class="pf-k">Father's Name</div><div class="pf-v">${u.father}</div></div>
+          <div><div class="pf-k">Mobile No.</div><div class="pf-v">${u.mobile}</div></div>
+          <div><div class="pf-k">Enrolled On</div><div class="pf-v">${u.enrolledAt}</div></div>
+          <div><div class="pf-k">Roll Number</div><div class="pf-v mono" style="color:var(--gold3);">${u.roll}</div></div>
+        </div>
+        ${u.biometric?`<div class="ec-strip"><div class="ec-chip">✓ Front Face</div><div class="ec-chip">✓ Left Profile</div><div class="ec-chip">✓ Right Profile</div><div class="ec-chip">✓ 512-D Embeddings</div><div class="ec-chip">✓ ID Card Scanned</div></div>`:''}
+      </div>
+    </div>`;
+}
+
+/* ═══════════════════════════════════════════
+   STUDENT: EXIT HISTORY + NOTIFICATIONS
+═══════════════════════════════════════════ */
+async function renderStuHistory(){
+  await syncDB();
+  DB = loadDB();
+  const u = SESSION.user;
+  const myReqs = DB.requests.filter(r=>r.roll===u.roll);
+  const feed = document.getElementById('stu-hist-feed');
+  const notifArea = document.getElementById('stu-notif-area');
+
+  // Show notification card for approved requests
+  const approved = myReqs.filter(r=>r.status==='approved');
+  if(approved.length){
+    notifArea.innerHTML = `
+      <div class="card" style="margin-bottom:20px;background:linear-gradient(135deg,rgba(19,40,80,.8),rgba(10,24,48,.6));">
+        <div class="sec-lbl">Guardian Notifications Sent</div>
+        <div class="card-title">📲 Notification History</div>
+        <div class="card-sub">The following alerts were sent to your guardian (${u.father||'Guardian'} · ${u.mobile||'—'})</div>
+        ${approved.map(r=>`
+          <div style="display:flex;align-items:flex-start;gap:14px;padding:14px;background:rgba(255,255,255,.02);border:1px solid rgba(16,185,129,.15);border-radius:14px;margin-bottom:10px;">
+            <div style="width:38px;height:38px;border-radius:10px;background:rgba(201,162,39,.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;">🔔</div>
+            <div style="flex:1;">
+              <div style="font-size:13.5px;color:#fff;font-weight:600;margin-bottom:3px;">Campus Exit Alert — ${r.date}</div>
+              <div style="font-size:12px;color:rgba(184,204,228,.55);line-height:1.5;margin-bottom:8px;">
+                <strong style="color:rgba(184,204,228,.8);">${u.name}</strong> exited Garrison University at <strong style="color:rgba(184,204,228,.8);">${r.time}</strong>.<br>
+                Reason: ${r.reason} · Approved by: ${r.by}
+              </div>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <span style="font-size:10.5px;padding:3px 9px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:9px;color:var(--gsl);">📱 Push Sent</span>
+                <span style="font-size:10.5px;padding:3px 9px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:9px;color:var(--gsl);">💬 WhatsApp Sent</span>
+                <span style="font-size:10.5px;padding:3px 9px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.2);border-radius:9px;color:var(--gsl);">📨 SMS Sent</span>
+              </div>
+            </div>
+          </div>`).join('')}
+      </div>`;
+  } else {
+    notifArea.innerHTML = '';
+  }
+
+  if(!myReqs.length){
+    feed.innerHTML = '<div style="text-align:center;padding:46px;color:rgba(184,204,228,.28);">No gate pass history yet.</div>';
+    return;
+  }
+
+  feed.innerHTML = myReqs.map(r=>`
+    <div class="req-card">
+      <div class="req-av">${r.status==='approved'?'✅':r.status==='rejected'?'❌':'⏳'}</div>
+      <div class="req-body">
+        <div class="req-nm">${r.reason}</div>
+        <div class="req-meta">📅 ${r.date} ⏰ ${r.time} → ${r.ret||'—'}</div>
+        <div class="req-row"><span class="badge b-${r.status==='approved'?'a':r.status==='rejected'?'r':'p'}">${r.status.toUpperCase()}</span></div>
+        ${r.notes?`<div class="req-rsn">📋 ${r.notes}</div>`:''}
+        ${r.remarks?`<div class="req-rmk">💬 ${r.remarks} — <em>${r.by}</em> · ${r.at}</div>`:''}
+        ${r.status==='approved'?`<div style="font-size:11.5px;color:rgba(16,185,129,.7);margin-top:6px;padding:7px 11px;background:rgba(16,185,129,.06);border-radius:8px;border:1px solid rgba(16,185,129,.12);">🔔 Guardian notified via Push, WhatsApp &amp; SMS</div>`:''}
+      </div>
+    </div>`).join('');
+}
+
+/* ═══════════════════════════════════════════
+   BIOMETRIC REGISTRATION (student side)
+═══════════════════════════════════════════ */
+let facesCap = {front:false,left:false,right:false};
+let faceCount = 0;
+let curOCR = null;
+
+function captureID(){
+  const u = SESSION.user;
+  curOCR = { name:u.name, roll:u.roll, dept:u.dept, deg:u.deg, sem:u.sem };
+  const cz = document.getElementById('cz-id');
+  cz.classList.add('scanning');
+  setTimeout(()=>{
+    drawIDCard(document.getElementById('id-cv'));
+    document.getElementById('cz-id-res').classList.add('show');
+    document.getElementById('cz-id-ov').style.opacity='0';
+    cz.classList.remove('scanning'); cz.classList.add('done');
+    setTimeout(()=>{
+      document.getElementById('ocr-panel').classList.add('show');
+      document.getElementById('o-name').textContent = curOCR.name;
+      document.getElementById('o-roll').textContent = curOCR.roll;
+      document.getElementById('o-dept').textContent = curOCR.dept;
+      document.getElementById('o-deg').textContent  = curOCR.deg;
+      document.getElementById('o-sem').textContent  = curOCR.sem;
+      document.getElementById('btn-id-nx').style.display = 'inline-flex';
+      toast('ID Card captured!','🪪');
+    }, 800);
+  }, 1800);
+}
+
+function recaptureID(){
+  document.getElementById('cz-id-res').classList.remove('show');
+  document.getElementById('cz-id-ov').style.opacity='1';
+  const cz=document.getElementById('cz-id'); cz.classList.remove('scanning','done');
+  document.getElementById('ocr-panel').classList.remove('show');
+  document.getElementById('btn-id-nx').style.display='none';
+  curOCR=null;
+}
+
+let enrollStream = null;
+let enrollBlobs = {front:null, left:null, right:null};
+
+async function startEnrollCamera(){
+  try {
+    if(enrollStream) { enrollStream.getTracks().forEach(t=>t.stop()); enrollStream=null; }
+    enrollStream = await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'user'}, audio:false});
+    const vid = document.getElementById('enroll-video');
+    vid.srcObject = enrollStream;
+    document.getElementById('enroll-guide').textContent = 'Camera ready — tap each slot to capture that angle';
+    toast('Camera started — capture each angle','📷');
+  } catch(e){
+    toast('Camera error: '+e.message,'❌');
+  }
+}
+
+function stopEnrollCamera(){
+  if(enrollStream){ enrollStream.getTracks().forEach(t=>t.stop()); enrollStream=null; }
+}
+
+function capFace(v){
+  if(facesCap[v]) return;
+  const vid = document.getElementById('enroll-video');
+  const cv  = document.getElementById('fc-'+v);
+  const slot = document.getElementById('fs-'+v);
+  slot.style.opacity='.55';
+
+  // If camera is live, capture real frame
+  if(enrollStream && vid.readyState >= 2){
+    const ctx = cv.getContext('2d');
+    cv.width=200; cv.height=267;
+    // Draw from video (crop to portrait)
+    const vw=vid.videoWidth, vh=vid.videoHeight;
+    const side=Math.min(vw, vh);
+    const sx=(vw-side)/2, sy=(vh-side)/2;
+    ctx.save();
+    if(v==='front'){ ctx.drawImage(vid, sx, sy, side, side, 0, 0, 200, 267); }
+    else if(v==='left'){ ctx.translate(200,0); ctx.scale(-1,1); ctx.drawImage(vid, sx, sy, side, side, 0, 0, 200, 267); ctx.restore(); }
+    else { ctx.drawImage(vid, sx, sy, side, side, 0, 0, 200, 267); }
+    ctx.restore();
+    // Save as blob for API
+    cv.toBlob(b=>{ enrollBlobs[v]=b; }, 'image/jpeg', 0.92);
+  } else {
+    // Fallback to drawn face if no camera
+    drawFaceCanvas(cv, v);
+    cv.toBlob(b=>{ enrollBlobs[v]=b; }, 'image/jpeg', 0.92);
+  }
+
+  setTimeout(()=>{
+    slot.style.opacity='1'; slot.classList.add('cap');
+    facesCap[v]=true; faceCount++;
+    const pct=(faceCount/3)*100;
+    document.getElementById('fp-fill').style.width=pct+'%';
+    document.getElementById('fp-lbl').textContent=faceCount+' of 3 captured'+(faceCount<3?' — tap remaining':'— all done!');
+    if(faceCount===3){
+      setTimeout(()=>{
+        document.getElementById('embed-panel').classList.add('show');
+        document.getElementById('embed-hash').textContent=Math.random().toString(36).substr(2,10)+'…';
+        document.getElementById('btn-face-nx').style.display='inline-flex';
+        toast('All 3 angles captured!','🤖');
+      },400);
+    } else { toast(v+' face captured!','📸'); }
+  }, 400);
+}
+
+function rsGo(n){
+  [1,2,3].forEach(i=>{
+    const rs=document.getElementById('rs'+i); if(rs) rs.style.display=i===n?'block':'none';
+    const sn=document.getElementById('sn'+i);
+    if(sn){sn.classList.remove('act','done'); if(i<n)sn.classList.add('done'); if(i===n)sn.classList.add('act');}
+    const sl=document.getElementById('sl'+i); if(sl){sl.classList.remove('done');if(i<n)sl.classList.add('done');}
+  });
+}
+
+async function finishBiometric(){
+  if(!curOCR){toast('Complete ID scan first.','⚠️');rsGo(1);return;}
+  const u=SESSION.user;
+
+  toast('Sending to backend…','⏳');
+
+  // Build multipart form for real API call
+  try {
+    const semNum = parseInt(u.sem)||1;
+    const batchYear = new Date().getFullYear() - Math.floor(semNum/2);
+    const fd = new FormData();
+    fd.append('roll_number', u.roll);
+    fd.append('full_name', u.name);
+    fd.append('department', u.dept);
+    fd.append('program', u.deg||'BS AI');
+    fd.append('semester', semNum);
+    fd.append('batch_year', batchYear);
+    fd.append('guardians_json', JSON.stringify([{full_name:u.father||'Guardian',relation:'Father',phone_number:u.mobile||'+923000000000',is_primary:true}]));
+
+    // Use real captured blobs if available, else canvas fallback
+    const getBlob = async (variant) => {
+      if(enrollBlobs[variant]) return enrollBlobs[variant];
+      return new Promise(res=>{
+        const cv2=document.createElement('canvas'); cv2.width=200; cv2.height=267;
+        drawFaceCanvas(cv2, variant); cv2.toBlob(b=>res(b),'image/jpeg');
+      });
+    };
+    const [frontBlob, leftBlob, rightBlob] = await Promise.all([getBlob('front'),getBlob('left'),getBlob('right')]);
+    const idCv=document.getElementById('id-cv');
+    const idBlob = await new Promise(res=>idCv.toBlob(b=>res(b),'image/jpeg'));
+
+    fd.append('id_card_image', idBlob, 'id_card.jpg');
+    fd.append('front_face_image', frontBlob, 'front.jpg');
+    fd.append('left_profile_image', leftBlob, 'left.jpg');
+    fd.append('right_profile_image', rightBlob, 'right.jpg');
+
+    const res = await fetch(API+'/enrollment/register', {method:'POST', body:fd});
+    if(!res.ok){ const e=await res.json().catch(()=>{}); throw new Error(e?.detail||res.statusText); }
+    const data = await res.json();
+
+    // Update local student with backend id
+    const stu = DB.students.find(s=>s.roll===u.roll);
+    if(stu){ stu.biometric=true; stu.id=data.student_id; SESSION.user=stu; saveStudents(DB.students); }
+
+    document.getElementById('pc-nm').textContent    = u.name;
+    document.getElementById('pc-roll-d').textContent= u.roll;
+    document.getElementById('pc-dept').textContent  = u.dept;
+    document.getElementById('pc-deg').textContent   = u.deg;
+    document.getElementById('pc-sem').textContent   = u.sem;
+    document.getElementById('pc-father').textContent= u.father;
+    document.getElementById('pc-mobile').textContent= u.mobile;
+    document.getElementById('pc-idno').textContent  = u.idno||'—';
+    drawFaceCanvas(document.getElementById('pc-photo-cv'),'front');
+    stopEnrollCamera();
+    rsGo(3);
+    toast('Biometric enrollment complete!','🎉');
+  } catch(e) {
+    toast('Enrollment failed: '+e.message,'❌');
+    console.error(e);
+  }
+}
+
+function resetReg(){
+  facesCap={front:false,left:false,right:false}; faceCount=0; curOCR=null;
+  enrollBlobs={front:null,left:null,right:null};
+  stopEnrollCamera();
+  recaptureID();
+  ['front','left','right'].forEach(v=>{
+    const fs=document.getElementById('fs-'+v); fs.classList.remove('cap'); fs.style.opacity='1';
+  });
+  document.getElementById('fp-fill').style.width='0%';
+  document.getElementById('fp-lbl').textContent='0 of 3 captured — tap each slot';
+  document.getElementById('embed-panel').classList.remove('show');
+  document.getElementById('btn-face-nx').style.display='none';
+  rsGo(1);
+}
+
+/* ═══════════════════════════════════════════
+   GATE SCANNER (Admin only, no login needed)
+═══════════════════════════════════════════ */
+let scanBusy=false;
+let gateStream=null;
+let gateScanInterval=null;
+const wait=ms=>new Promise(r=>setTimeout(r,ms));
+
+async function startGateCamera(){
+  try {
+    gateStream = await navigator.mediaDevices.getUserMedia({video:{width:640,height:480,facingMode:'environment'}, audio:false});
+    const vid = document.getElementById('gate-video');
+    vid.srcObject = gateStream;
+    vid.style.display='block';
+    document.getElementById('vp-idle').style.display='none';
+    return true;
+  } catch(e){
+    toast('Camera error: '+e.message,'❌');
+    return false;
+  }
+}
+
+function stopGateCamera(){
+  if(gateStream){ gateStream.getTracks().forEach(t=>t.stop()); gateStream=null; }
+  if(gateScanInterval){ clearInterval(gateScanInterval); gateScanInterval=null; }
+  const vid = document.getElementById('gate-video');
+  vid.style.display='none'; vid.srcObject=null;
+  document.getElementById('vp-idle').style.display='flex';
+  document.getElementById('btn-cam-stop').style.display='none';
+  document.getElementById('btn-scan').style.display='inline-flex';
+  scanBusy=false;
+}
+
+function captureGateFrame(){
+  const vid = document.getElementById('gate-video');
+  const cv  = document.getElementById('vp-cv');
+  if(!vid || vid.readyState < 2) return null;
+  cv.width=vid.videoWidth; cv.height=vid.videoHeight;
+  cv.getContext('2d').drawImage(vid,0,0);
+  return cv;
+}
+
+function setAI(n,state,ic,st){
+  const s=document.getElementById('ai-s'+n),t=document.getElementById('ai-t'+n);
+  if(!s||!t)return;
+  s.className='ai-step'+' s'+state;
+  const b=s.querySelector('.ai-b'); if(b)b.textContent=ic;
+  t.className='ai-st '+st; t.textContent={'idle':'Idle','active':'Processing…','done':'Done ✓','fail':'Failed'}[state]||st;
+}
+
+async function runScan(){
+  if(scanBusy) return;
+  scanBusy=true;
+  await syncDB();
+  document.getElementById('db-count').textContent=DB.students.length+' records';
+
+  const btn=document.getElementById('btn-scan');
+  btn.disabled=true; btn.textContent='⏳ Starting camera…';
+  document.getElementById('scan-vp').classList.add('live');
+
+  // Start real webcam
+  const camOK = await startGateCamera();
+  document.getElementById('btn-cam-stop').style.display='inline-flex';
+  document.getElementById('btn-scan').style.display='none';
+
+  if(!camOK){ scanBusy=false; btn.disabled=false; btn.textContent='▶ Start Biometric Scan'; return; }
+
+  btn.textContent='⏳ Scanning…';
+  toast('Camera live — scanning for face…','📷');
+
+  // Run AI pipeline UI
+  setAI(1,'active','⚙️','active'); await wait(600); setAI(1,'done','👁️','done');
+  setAI(2,'active','⚙️','active'); await wait(700); setAI(2,'done','💡','done');
+  setAI(3,'active','⚙️','active'); await wait(500);
+
+  // Capture frame from live webcam and send to backend
+  let apiResult = null;
+  const cv = captureGateFrame();
+  if(cv){
+    try {
+      const frameBlob = await new Promise(res=>cv.toBlob(b=>res(b),'image/jpeg',0.92));
+      const fd = new FormData(); fd.append('frame', frameBlob, 'frame.jpg');
+      const res = await fetch(API+'/recognition/scan', {method:'POST', body:fd});
+      if(res.ok) apiResult = await res.json();
+    } catch(e){ console.warn('Recognition API error:', e); }
+  }
+
+  setAI(3,'done','🔎','done');
+  setAI(4,'active','⚙️','active'); await wait(600);
+
+  if(!apiResult || !apiResult.recognized){
+    // Not recognised
+    setAI(4,'fail','🚫','fail');
+    setAI(5,'fail','🚫','fail');
+    document.getElementById('conf-n').textContent='—';
+    document.getElementById('conf-d').textContent= apiResult ? 'Below threshold' : 'No face detected';
+    document.getElementById('vp-el').className='vp-el show den';
+    document.getElementById('vp-strip').classList.add('show');
+    document.getElementById('vs-nm').textContent='Unknown Student';
+    document.getElementById('vs-roll').textContent='NOT REGISTERED';
+    document.getElementById('vs-dept').textContent='No Record';
+    document.getElementById('vs-sem').textContent='—';
+    document.getElementById('vs-badge').textContent='✕ Not Found';
+    ['pt-nm','pt-roll','pt-dept','pt-rsn','pt-hod'].forEach(id=>document.getElementById(id).textContent='—');
+    document.getElementById('pt-status').innerHTML='<span class="badge b-r">NOT REGISTERED</span>';
+    document.getElementById('pt-time').textContent=new Date().toLocaleTimeString();
+    const vb=document.getElementById('vbox'); vb.className='vbox unregistered';
+    document.getElementById('gv-txt').textContent='⚠ NOT REGISTERED';
+    document.getElementById('gv-sub').textContent='Student not found in SCEMS database';
+    toast('Student NOT recognised','⚠️');
+  } else {
+    // Recognised — show real data from API
+    const simScore = (apiResult.similarity_score*100||0).toFixed(1);
+    const confScore= (apiResult.confidence*100||simScore).toFixed(1);
+    setAI(4,'done','🪪','done');
+
+    let c=0; const iv=setInterval(()=>{
+      c=Math.min(c+(+simScore/30),+simScore);
+      document.getElementById('conf-n').textContent=c.toFixed(1);
+      document.getElementById('conf-fi').style.width=c+'%';
+      if(c>=+simScore) clearInterval(iv);
+    },35);
+
+    document.getElementById('conf-d').textContent='Identity verified — '+simScore+'% match';
+    setAI(5,'active','⚙️','active'); await wait(700);
+
+    const pass = apiResult.gate_pass_status === 'approved';
+    document.getElementById('vp-el').className='vp-el show ver';
+    document.getElementById('vp-strip').classList.add('show');
+    document.getElementById('vs-nm').textContent  = apiResult.student_name||'—';
+    document.getElementById('vs-roll').textContent = apiResult.roll_number||'—';
+    document.getElementById('vs-dept').textContent = '—';
+    document.getElementById('vs-sem').textContent  = '—';
+    document.getElementById('vs-badge').textContent= pass?'✓ Pass Valid':'✕ No Pass';
+    document.getElementById('pt-nm').textContent   = apiResult.student_name||'—';
+    document.getElementById('pt-roll').textContent = apiResult.roll_number||'—';
+    document.getElementById('pt-dept').textContent = '—';
+    document.getElementById('pt-rsn').textContent  = '—';
+    document.getElementById('pt-hod').textContent  = '—';
+    document.getElementById('pt-time').textContent = new Date().toLocaleTimeString();
+
+    if(pass){
+      setAI(5,'done','🎫','done');
+      document.getElementById('pt-status').innerHTML='<span class="badge b-a">APPROVED</span>';
+      document.getElementById('vp-el').className='vp-el show ver';
+      const vb=document.getElementById('vbox'); vb.className='vbox allowed';
+      document.getElementById('gv-txt').textContent='✓  EXIT ALLOWED';
+      document.getElementById('gv-sub').textContent=apiResult.message||'Approved gate pass — cleared to exit';
+      toast('EXIT ALLOWED — '+apiResult.student_name,'✅');
+    } else {
+      setAI(5,'fail','🎫','fail');
+      document.getElementById('pt-status').innerHTML='<span class="badge b-r">NO VALID PASS</span>';
+      document.getElementById('vp-el').className='vp-el show den';
+      const vb=document.getElementById('vbox'); vb.className='vbox denied';
+      document.getElementById('gv-txt').textContent='✕  EXIT DENIED';
+      document.getElementById('gv-sub').textContent=apiResult.message||'No approved gate pass on record';
+      toast('EXIT DENIED — '+apiResult.student_name,'🚫');
+    }
+  }
+
+  scanBusy=false;
+  btn.disabled=false; btn.textContent='▶ Scan Again';
+  btn.style.display='inline-flex';
+}
+
+function resetScan(){
+  stopGateCamera();
+  scanBusy=false;
+  const btn=document.getElementById('btn-scan'); if(!btn)return;
+  btn.disabled=false; btn.textContent='▶ Start Biometric Scan';
+  btn.style.display='inline-flex';
+  document.getElementById('vp-idle').style.display='flex';
+  document.getElementById('vp-strip').classList.remove('show');
+  document.getElementById('vp-el').className='vp-el';
+  document.getElementById('scan-vp').classList.remove('live');
+  for(let i=1;i<=5;i++) setAI(i,'idle',['👁️','💡','🔎','🪪','🎫'][i-1],'idle');
+  document.getElementById('conf-n').textContent='—';
+  document.getElementById('conf-fi').style.width='0%';
+  document.getElementById('conf-d').textContent='Awaiting scan';
+  document.getElementById('vbox').className='vbox idle';
+  document.getElementById('gv-txt').textContent='AWAITING';
+  document.getElementById('gv-sub').textContent='Start scan to proceed';
+  ['pt-nm','pt-roll','pt-dept','pt-rsn','pt-hod','pt-time'].forEach(id=>document.getElementById(id).textContent='—');
+  document.getElementById('pt-status').textContent='—';
+  document.getElementById('vs-nm').textContent='—';
+  document.getElementById('vs-roll').textContent='—';
+}
+
+/* ═══════════════════════════════════════════
+   CANVAS DRAWING
+═══════════════════════════════════════════ */
+function drawIDCard(cv){
+  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const u=SESSION.user;
+  const bg=ctx.createLinearGradient(0,0,W,H); bg.addColorStop(0,'#0e2040'); bg.addColorStop(1,'#071224');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(201,162,39,0.62)'; ctx.lineWidth=3; ctx.strokeRect(5,5,W-10,H-10);
+  const hb=ctx.createLinearGradient(0,0,W,0); hb.addColorStop(0,'#c9920a'); hb.addColorStop(.5,'#d4a017'); hb.addColorStop(1,'#c9920a');
+  ctx.fillStyle=hb; ctx.fillRect(0,0,W,56);
+  ctx.fillStyle='#071224'; ctx.beginPath(); ctx.arc(30,28,19,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#d4a017'; ctx.font='bold 12px serif'; ctx.textAlign='center'; ctx.fillText('GU',30,33);
+  ctx.fillStyle='#071224'; ctx.font='bold 13px sans-serif'; ctx.textAlign='left'; ctx.fillText('GARRISON UNIVERSITY',58,22);
+  ctx.font='9px sans-serif'; ctx.fillText('STUDENT IDENTITY CARD · LAHORE, PAKISTAN',58,40);
+  // Face placeholder
+  ctx.fillStyle='rgba(201,162,39,0.1)'; ctx.fillRect(14,70,88,105);
+  ctx.strokeStyle='rgba(201,162,39,0.35)'; ctx.lineWidth=1; ctx.strokeRect(14,70,88,105);
+  const fg=ctx.createRadialGradient(58,112,4,58,112,34); fg.addColorStop(0,'#d4a878'); fg.addColorStop(1,'#a07040');
+  ctx.fillStyle=fg; ctx.beginPath(); ctx.ellipse(58,112,26,33,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#2a1a0a'; [[49,101],[67,101]].forEach(([x,y])=>{ctx.beginPath();ctx.ellipse(x,y,5,4,0,0,Math.PI*2);ctx.fill();});
+  ctx.beginPath(); ctx.arc(58,122,7,.2,Math.PI-.2); ctx.strokeStyle='#7a4020'; ctx.lineWidth=1.5; ctx.stroke();
+  // Text
+  ctx.fillStyle='#fff'; ctx.font='bold 12.5px sans-serif'; ctx.textAlign='left'; ctx.fillText(u.name,114,85);
+  ctx.fillStyle='rgba(201,162,39,.88)'; ctx.font='9.5px monospace'; ctx.fillText(u.roll,114,101);
+  ctx.fillStyle='rgba(184,204,228,.65)'; ctx.font='9px sans-serif';
+  ctx.fillText(u.dept,114,117); ctx.fillText(u.deg,114,132); ctx.fillText(u.sem+' Semester',114,148);
+  ctx.fillText('ID Card: '+u.idno,114,163);
+  ctx.fillStyle='rgba(201,162,39,.38)'; ctx.font='8px sans-serif'; ctx.fillText('Valid Until: Dec 2027',114,180);
+  for(let i=0;i<50;i++){ctx.fillStyle=i%4===0?'rgba(201,162,39,.72)':'rgba(255,255,255,.65)';ctx.fillRect(14+i*6.7,195,i%3===0?5:3,18);}
+  ctx.fillStyle='rgba(184,204,228,.32)'; ctx.font='7px monospace'; ctx.textAlign='center';
+  ctx.fillText(u.roll+' · GARRISON UNIVERSITY · LAHORE',W/2,222);
+}
+
+function drawFaceCanvas(cv,variant){
+  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const bg=ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#0e1e3a'); bg.addColorStop(1,'#050c1c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(201,162,39,.04)'; ctx.lineWidth=.5;
+  for(let x=0;x<W;x+=22){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=22){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  const off={front:[0,0],left:[-17,2],right:[17,2]};
+  const [ox,oy]=off[variant]||[0,0];
+  const cx=W/2+ox,cy=H*.46+oy;
+  ctx.fillStyle='#b07030'; ctx.fillRect(cx-12,cy+47,24,52);
+  ctx.fillStyle='#1a2540'; ctx.beginPath(); ctx.ellipse(cx,H+7,75,36,0,Math.PI,Math.PI*2); ctx.fill();
+  const f=ctx.createRadialGradient(cx-7,cy-9,6,cx,cy,58);
+  f.addColorStop(0,'#dbb080'); f.addColorStop(.55,'#c49060'); f.addColorStop(1,'#a07040');
+  ctx.fillStyle=f; ctx.beginPath(); ctx.ellipse(cx,cy,50,60,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#1a0a00';
+  ctx.beginPath(); ctx.ellipse(cx,cy-48,51,20,0,Math.PI,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx-46,cy-7,10,27,-.27,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx+46,cy-7,10,27,.27,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#3a1a00'; ctx.lineWidth=2.6; ctx.lineCap='round';
+  const eyes=variant==='front'?[[cx-21,cy-11],[cx+21,cy-11]]:variant==='left'?[[cx-8,cy-11]]:[[cx+8,cy-11]];
+  if(variant==='front'){ctx.beginPath();ctx.moveTo(cx-30,cy-20);ctx.quadraticCurveTo(cx-16,cy-24,cx-6,cy-20);ctx.stroke();ctx.beginPath();ctx.moveTo(cx+6,cy-20);ctx.quadraticCurveTo(cx+16,cy-24,cx+30,cy-20);ctx.stroke();}
+  eyes.forEach(([ex,ey])=>{
+    ctx.fillStyle='#fff';ctx.beginPath();ctx.ellipse(ex,ey,7.5,5.5,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#2a1a0a';ctx.beginPath();ctx.ellipse(ex,ey,5,5,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='#050a10';ctx.beginPath();ctx.ellipse(ex,ey,3,3,0,0,Math.PI*2);ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.72)';ctx.beginPath();ctx.arc(ex+1.4,ey-1.4,1.3,0,Math.PI*2);ctx.fill();
+  });
+  ctx.strokeStyle='#9a6030';ctx.lineWidth=1.5;
+  if(variant==='front'){ctx.beginPath();ctx.moveTo(cx,cy-4);ctx.quadraticCurveTo(cx-5,cy+7,cx-3,cy+14);ctx.stroke();ctx.beginPath();ctx.moveTo(cx,cy-4);ctx.quadraticCurveTo(cx+5,cy+7,cx+3,cy+14);ctx.stroke();ctx.beginPath();ctx.moveTo(cx-8,cy+14);ctx.quadraticCurveTo(cx,cy+18,cx+8,cy+14);ctx.stroke();}
+  else{const s=variant==='left'?-1:1;ctx.beginPath();ctx.moveTo(cx+s*2,cy-4);ctx.quadraticCurveTo(cx+s*7,cy+8,cx+s*5,cy+14);ctx.stroke();}
+  ctx.beginPath();ctx.moveTo(cx-16,cy+26);ctx.quadraticCurveTo(cx,cy+22,cx+16,cy+26);ctx.fillStyle='#b86040';ctx.fill();
+  ctx.beginPath();ctx.moveTo(cx-16,cy+26);ctx.quadraticCurveTo(cx,cy+33,cx+16,cy+26);ctx.fillStyle='#9a4030';ctx.fill();
+  if(variant==='front'){[cx-52,cx+52].forEach(ex=>{ctx.fillStyle='#c49060';ctx.beginPath();ctx.ellipse(ex,cy+2,6.5,12,0,0,Math.PI*2);ctx.fill();});}
+  ctx.strokeStyle='rgba(16,185,129,.8)';ctx.lineWidth=2;
+  const bx=cx-60,by=cy-72,bw=120,bh=142;ctx.strokeRect(bx,by,bw,bh);
+  [[bx,by],[bx+bw,by],[bx,by+bh],[bx+bw,by+bh]].forEach(([px,py],i)=>{
+    ctx.beginPath();ctx.strokeStyle='rgba(16,185,129,1)';ctx.lineWidth=3;
+    if(i===0){ctx.moveTo(px,py+18);ctx.lineTo(px,py);ctx.lineTo(px+18,py);}
+    if(i===1){ctx.moveTo(px-18,py);ctx.lineTo(px,py);ctx.lineTo(px,py+18);}
+    if(i===2){ctx.moveTo(px,py-18);ctx.lineTo(px,py);ctx.lineTo(px+18,py);}
+    if(i===3){ctx.moveTo(px-18,py);ctx.lineTo(px,py);ctx.lineTo(px,py-18);}
+    ctx.stroke();
+  });
+  ctx.fillStyle='rgba(16,185,129,.9)';ctx.beginPath();ctx.arc(W-15,15,12,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='#fff';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText('✓',W-15,19);
+}
+
+function drawScanFace(cv,pass){
+  const ctx=cv.getContext('2d'),W=cv.width,H=cv.height;
+  const bg=ctx.createLinearGradient(0,0,0,H); bg.addColorStop(0,'#020810'); bg.addColorStop(1,'#050c1c');
+  ctx.fillStyle=bg; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle='rgba(201,162,39,.04)'; ctx.lineWidth=.5;
+  for(let x=0;x<W;x+=34){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
+  for(let y=0;y<H;y+=34){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
+  const cx=W/2,cy=H/2-6;
+  ctx.fillStyle='#b07030'; ctx.fillRect(cx-15,cy+52,30,55);
+  ctx.fillStyle='#0d1c38'; ctx.beginPath(); ctx.ellipse(cx,H+9,95,46,0,Math.PI,Math.PI*2); ctx.fill();
+  const ff=ctx.createRadialGradient(cx-9,cy-10,7,cx,cy,68);
+  ff.addColorStop(0,'#deb878'); ff.addColorStop(.55,'#c49060'); ff.addColorStop(1,'#a07040');
+  ctx.fillStyle=ff; ctx.beginPath(); ctx.ellipse(cx,cy,60,73,0,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle='#0e0600';
+  ctx.beginPath(); ctx.ellipse(cx,cy-61,61,24,0,Math.PI,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx-58,cy-4,12,32,-.23,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.ellipse(cx+58,cy-4,12,32,.23,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#3a1a00'; ctx.lineWidth=2.8; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(cx-34,cy-24); ctx.quadraticCurveTo(cx-20,cy-29,cx-7,cy-24); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx+7,cy-24); ctx.quadraticCurveTo(cx+20,cy-29,cx+34,cy-24); ctx.stroke();
+  [[cx-24,cy-13],[cx+24,cy-13]].forEach(([ex,ey])=>{
+    ctx.fillStyle='#fff'; ctx.beginPath(); ctx.ellipse(ex,ey,9,6.5,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#2a1a0a'; ctx.beginPath(); ctx.ellipse(ex,ey,6.5,6.5,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#050a10'; ctx.beginPath(); ctx.ellipse(ex,ey,3.8,3.8,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='rgba(255,255,255,.75)'; ctx.beginPath(); ctx.arc(ex+1.6,ey-1.6,1.5,0,Math.PI*2); ctx.fill();
+  });
+  ctx.strokeStyle='#9a6030'; ctx.lineWidth=1.8;
+  ctx.beginPath();ctx.moveTo(cx,cy-5);ctx.quadraticCurveTo(cx-6,cy+9,cx-4,cy+16);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx,cy-5);ctx.quadraticCurveTo(cx+6,cy+9,cx+4,cy+16);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx-10,cy+16);ctx.quadraticCurveTo(cx,cy+21,cx+10,cy+16);ctx.stroke();
+  ctx.beginPath();ctx.moveTo(cx-18,cy+31);ctx.quadraticCurveTo(cx,cy+26,cx+18,cy+31);ctx.fillStyle='#c07050';ctx.fill();
+  ctx.beginPath();ctx.moveTo(cx-18,cy+31);ctx.quadraticCurveTo(cx,cy+39,cx+18,cy+31);ctx.fillStyle='#a05030';ctx.fill();
+  [cx-66,cx+66].forEach(ex=>{ctx.fillStyle='#c49060';ctx.beginPath();ctx.ellipse(ex,cy,8,16,0,0,Math.PI*2);ctx.fill();});
+  const col=pass?'rgba(16,185,129,.85)':'rgba(239,68,68,.85)';
+  ctx.strokeStyle=col; ctx.lineWidth=2;
+  const bx=cx-78,by=cy-90,bw=156,bh=180; ctx.strokeRect(bx,by,bw,bh);
+  [[bx,by],[bx+bw,by],[bx,by+bh],[bx+bw,by+bh]].forEach(([px,py],i)=>{
+    ctx.beginPath();ctx.strokeStyle=col.replace('.85','1');ctx.lineWidth=3;
+    if(i===0){ctx.moveTo(px,py+21);ctx.lineTo(px,py);ctx.lineTo(px+21,py);}
+    if(i===1){ctx.moveTo(px-21,py);ctx.lineTo(px,py);ctx.lineTo(px,py+21);}
+    if(i===2){ctx.moveTo(px,py-21);ctx.lineTo(px,py);ctx.lineTo(px+21,py);}
+    if(i===3){ctx.moveTo(px-21,py);ctx.lineTo(px,py);ctx.lineTo(px,py-21);}
+    ctx.stroke();
+  });
+  ctx.fillStyle='rgba(201,162,39,.45)'; ctx.font='8px monospace'; ctx.textAlign='left';
+  ctx.fillText('RES:1920×1080 | FPS:30 | CAM:GATE-1 | AI:ONLINE', 12, 13);
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', async ()=>{
+  selectRole('student');
+  // Check backend connectivity
+  try {
+    const h = await fetch('http://localhost:8000/health');
+    if(h.ok){
+      const d = await h.json();
+      console.log('Backend connected:', d);
+      toast('Backend connected ✓ — '+d.faiss_index_size+' vectors loaded','🟢');
+    }
+  } catch(e){
+    console.warn('Backend offline — running in local mode');
+    toast('Backend offline — local mode','⚠️');
+  }
+  document.addEventListener('click', e=>{
+    const sb=document.getElementById('sidebar');
+    if(sb&&sb.classList.contains('open')&&!sb.contains(e.target)&&!e.target.closest('.hbtn'))
+      sb.classList.remove('open');
+  });
+});
+</script>
+</body>
+</html>
