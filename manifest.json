@@ -1,0 +1,19 @@
+{
+  "name": "Smart Attendance",
+  "short_name": "SmartAttend",
+  "description": "AI-powered smart attendance system with facial recognition and campus management.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0a1120",
+  "theme_color": "#0f2860",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "logo.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
